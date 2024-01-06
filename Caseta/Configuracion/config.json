@@ -1,0 +1,102 @@
+{
+    "general": {
+        "informacion_estacionamiento": {
+            "nombre_estacionamiento": "Monterrey 75",
+            "path_logo": "a xd",
+            "correo": "sistemas@pasesa.com.mx",
+            "contraseña": "@System2023",
+            "iv": "",
+            "cantidad_cajones": 200
+        },
+        "configuracion_sistema": {
+            "impresora": {
+                "idVendor": "0x04b8",
+                "idProduct": "0x0202"
+            },
+            "formato_hora_interface": "%Y-%m-%d %H:%M",
+            "formato_hora_boleto": "%d-%b-%Y %H:%M",
+            "formato_hora_reloj_expedidor_boleto": "%d-%b-%Y %H:%M:%S",
+            "color_botones": "#062546",
+            "color_letra_botones": "white",
+            "fuente": "Arial",
+            "penalizacion_boleto_perdido": true,
+            "reloj": false,
+            "envio_información": false,
+            "pantalla_completa": false,
+            "requiere_placa": false
+        },
+        "configuracion_pensionados": {
+            "contraseña": "P4s3",
+            "costo_tarjeta": 100,
+            "costo_reposicion_tarjeta": 250,
+            "penalizacion_diaria": 5
+        },
+        "configuiracion_envio": {
+            "destinatario_DB": "sistemas@pasesa.com.mx",
+            "destinatario_corte": "sistemas@pasesa.com.mx",
+            "destinatario_notificaciones": "sistemas@pasesa.com.mx"
+        },
+        "configuiracion_reloj": {
+            "color_primera_hora": "#062445",
+            "color_1_fraccion": "#b9d8f9",
+            "color_2_fraccion": "#5ba3f1",
+            "color_3_fraccion": "#1270d3",
+            "color_hora_completa": "#062546",
+            "color_alerta": "red"
+        }
+    },
+    "tarifa": {
+        "tarifa_sistema": "",
+        "tarifa_simple": {
+            "inicio_cobro_fraccion": 2,
+            "tarifa_1_fraccion": 7.0,
+            "tarifa_2_fraccion": 14.0,
+            "tarifa_3_fraccion": 21.0,
+            "tarifa_hora": 28.0,
+            "tarifa_dia": 0
+        },
+        "tarifa_personalizada": {
+            "inicio_cobro_fraccion": 1,
+            "tarifa_1_fraccion": 0.0,
+            "tarifa_2_fraccion": 0.0,
+            "tarifa_3_fraccion": 0.0,
+            "tarifa_1_hora": 0.0,
+            "tarifa_2_hora": 0.0,
+            "tarifa_3_hora": 0.0,
+            "tarifa_4_hora": 0.0,
+            "tarifa_5_hora": 0.0,
+            "tarifa_6_hora": 0.0,
+            "tarifa_7_hora": 0.0,
+            "tarifa_8_hora": 0.0,
+            "tarifa_9_hora": 0.0,
+            "tarifa_10_hora": 0.0,
+            "tarifa_11_hora": 0.0,
+            "tarifa_12_hora": 0.0,
+            "tarifa_13_hora": 0.0,
+            "tarifa_14_hora": 0.0,
+            "tarifa_15_hora": 0.0,
+            "tarifa_16_hora": 0.0,
+            "tarifa_17_hora": 0.0,
+            "tarifa_18_hora": 0.0,
+            "tarifa_19_hora": 0.0,
+            "tarifa_20_hora": 0.0,
+            "tarifa_21_hora": 0.0,
+            "tarifa_22_hora": 0.0,
+            "tarifa_23_hora": 0.0,
+            "tarifa_24_hora": 0.0
+        },
+        "tarifa_boleto_perdido": 250
+    },
+    "funcionamiento_interno": {
+        "db": {
+            "usuario": "Admin",
+            "contraseña": "P4S3S4_ADMIN",
+            "iv": "",
+            "host": "localhost",
+            "db": "db_monterrey_89"
+        },
+        "controlador": {
+            "pin_barrera": 45
+        }
+    }
+}

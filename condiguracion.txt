@@ -1,0 +1,25 @@
+nombre de estacionamiento
+formato de hora
+penalizacion con importe de boleto perdido
+configuracion de impresora
+contraseña de pensionados
+valor de tarjeta/tarjeton
+valor de reposicion de tarjeta/tarjeton
+penalización diaria por pago atrasado de pension
+imagenes del sistema
+fuentes del sistema
+si el reloj esta habilitado
+si se envia la información
+si la pantalla esta en modo de pantalla completa
+si se requiere escribir la placa al generar boletos
+correo y contraseña del estacionamiento
+correo para enviar el corte en archivo de texto y notificacion de reimpresion de corte
+configuración de la base de datos
+colores de cada cuarto de hora del reloj
+configuracion de pines
+
+
+        self.comboMesCorte = ttk.Combobox(
+            self.labelframe5, width=6, justify=tk.RIGHT, state="readonly")
+        self.comboMesCorte["values"] = ["1", "2", "3",
+                                        "4", "5", "6", "7", "8", "9", "10", "11", "12"]
