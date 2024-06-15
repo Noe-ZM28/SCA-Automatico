@@ -1,0 +1,100 @@
+¿Qué color prefiere?
+¿Cuál es su película favorita?
+¿Cuántas veces ha viajado al extranjero?
+¿Cuál es su comida preferida?
+¿Qué deporte le gusta practicar?
+¿Cuál es su canción favorita?
+¿Con qué frecuencia lee libros?
+¿Prefiere el café o el té?
+¿Cuál es su estación del año favorita?
+¿Tiene alguna mascota?
+¿Cuántas horas duerme cada noche?
+¿Cuál es su destino de vacaciones soñado?
+¿Practica alguna actividad artística?
+¿Cuál es su hobby principal?
+¿Tiene alguna superstición?
+¿Cuál es su tipo de música favorito?
+¿Le gusta cocinar?
+¿Tiene alguna habilidad especial?
+¿Cuál es su libro favorito?
+¿Disfruta de la tecnología?
+¿Ha aprendido algún idioma adicional?
+¿Cómo describiría su estilo de vestir?
+¿Prefiere la playa o la montaña?
+¿Tiene algún talento oculto?
+¿Cuál es su profesión?
+¿Cuál es su mayor logro hasta ahora?
+¿Cuántas veces ha cambiado de trabajo?
+¿Tiene alguna meta a corto plazo?
+¿Cuál es su platillo favorito?
+¿Disfruta de la fotografía?
+¿Cuál es su medio de transporte preferido?
+¿Practica algún deporte acuático?
+¿Ha participado en algún voluntariado?
+¿Cuál es su lugar favorito en casa?
+¿Prefiere el cine o ver películas en casa?
+¿Le gusta la lluvia?
+¿Cuántas horas trabaja a la semana?
+¿Tiene alguna colección?
+¿Qué le motiva?
+¿Cuál es su color de ojos?
+¿Prefiere la música en vivo o grabada?
+¿Le gusta la jardinería?
+¿Cuál es su aroma favorito?
+¿Disfruta de los deportes extremos?
+¿Ha tenido alguna experiencia paranormal?
+¿Cómo describe su personalidad en una palabra?
+¿Cuál es su estación del año menos favorita?
+¿Tiene alguna fobia?
+¿Qué le hace reír?
+¿Cuál es su lugar de vacaciones recurrente?
+¿Le gusta la moda?
+¿Cuál es su mayor miedo?
+¿Tiene alguna tradición familiar especial?
+¿Cuál es su día de la semana favorito?
+¿Practica alguna actividad espiritual?
+¿Prefiere el día o la noche?
+¿Cuál es su número de la suerte?
+¿Cuántas veces ha cambiado de residencia?
+¿Le gusta la comida picante?
+¿Tiene algún objeto de la infancia que atesora?
+¿Cuál es su tipo de película preferido?
+¿Cómo prefiere pasar un día lluvioso?
+¿Le gusta la ópera?
+¿Cuál es su plan ideal para el fin de semana?
+¿Practica algún deporte de equipo?
+¿Ha tenido alguna experiencia cercana a la muerte?
+¿Cuál es su tema de conversación favorito?
+¿Le gusta el circo?
+¿Tiene alguna rutina matutina?
+¿Cuál es su sabor de helado preferido?
+¿Ha tenido alguna mascota exótica?
+¿Prefiere la ciudad o el campo?
+¿Cuál es su flor favorita?
+¿Le gusta la astrología?
+¿Cuál es su mayor arrepentimiento?
+¿Disfruta de la meditación?
+¿Cuál es su serie de televisión favorita?
+¿Ha tenido alguna experiencia de déjà vu?
+¿Cuál es su juguete favorito de la infancia?
+¿Le gusta la comedia stand-up?
+¿Cómo se relaja?
+¿Cuál es su tipo de vino preferido?
+¿Practica algún deporte de invierno?
+¿Cuál es su libro de autoayuda favorito?
+¿Le gusta la música clásica?
+¿Tiene alguna habilidad artesanal?
+¿Cuál es su talento más inusual?
+¿Prefiere el amanecer o el atardecer?
+¿Tiene alguna meta a largo plazo?
+¿Cuál es su peor hábito?
+¿Le gusta la danza?
+¿Cuál es su actividad favorita en familia?
+¿Tiene alguna filosofía de vida?
+¿Cuál es su palabra favorita?
+¿Le gusta la pintura?
+¿Cómo maneja el estrés?
+¿Cuál es su mayor virtud?
+¿Disfruta de la astronomía?
+¿Tiene alguna película que haya visto múltiples veces?
+¿Cuál es su animal espiritual?

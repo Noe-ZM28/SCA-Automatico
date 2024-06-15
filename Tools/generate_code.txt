@@ -1,0 +1,24 @@
+
+with open("a.txt", "w", encoding="UTF-8") as file:
+    for i in range(25):
+        for ii in range(4):
+            if ii == 0:
+                ii = "hora"
+            text = f"\n        if self.variable_{i}_{ii}.get() != self.config_{i}_{ii}:"
+            file.write(text)
+            file.write("\n            changes.append([")
+            file.write(f"""\n                f"Tarifa avanzada Hora {i} {'fracción '+str(ii) if ii != 'hora' else 'hora completa'}: """+"{self.config"+f"_{i}_{ii}"+"} -> {self.variable"+f"_{i}_{ii}"+""".get()}",""")
+            file.write("\n                lambda:{self.instance_config.set_config(")
+            file.write(f"""\n                    "tarifa", "tarifa_personalizada", "{i}", "{ii}", new_value=self.variable_{i}_{ii}.get()),""")
+
+            file.write("\n               self.cambios_model.add_change(")
+            file.write(f"""nombre_cambio = "Tarifa avanzada Hora {i} {'fracción '+str(ii) if ii != 'hora' else 'hora completa'}",valor_anterior= self.config_{i}_{ii}, valor_nuevo=self.variable_{i}_{ii}.get(), tipo_cambio = tipo_cambio, nombre_usuario= self.nombre_usuario_activo)""")
+
+            if ii == "hora":
+                ii = 0
+
+            file.write('\n           } ])')
+            file.write('\n')
+
+
+
