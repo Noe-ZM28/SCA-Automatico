@@ -1,3 +1,13 @@
+# archivos de configuración
+Config/config.json
+Public/Img/imagen_datos.jpg
+Public/Img/AutoA.png
+Public/Img/LOGO.jpg
+Public/Img/QR_pension.png
+Public/Img/reducida.png
+
+QR_pensiones/*.png
+
 ### Django ###
 *.log
 *.pot
@@ -65,8 +75,6 @@ coverage.xml
 .pytest_cache/
 cover/
 
-
-
 # Translations
 *.mo
 
@@ -107,9 +115,6 @@ dmypy.json
 cython_debug/
 
 # Visual Studio Code # 
-.vscode/
-!.vscode/settings.json 
-!.vscode/tasks.json 
-!.vscode/launch.json 
 !.vscode/extensions.json 
 .history
+
