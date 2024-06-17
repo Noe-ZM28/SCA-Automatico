@@ -1,11 +1,10 @@
 # archivos de configuración
 Config/config.json
-# Public/Img/imagen_datos.jpg
-# Public/Img/AutoA.png
-# Public/Img/LOGO.jpg
+Public/Img/imagen_datos.jpg
+Public/Img/AutoA.png
+Public/Img/LOGO.jpg
 Public/Img/QR_pension.png
 Public/Img/reducida.png
-
 
 QR_pensiones/*.png
 
