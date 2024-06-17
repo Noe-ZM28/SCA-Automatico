@@ -19,6 +19,10 @@ def main():
             # Importar la clase del sistema de entrada
             from Views.ViewEntrada import ViewEntrada as System
 
+        elif system_to_load == 2:
+            # Importar la clase del sistema de salida
+            from Views.ViewSalida import ViewSalida as System
+
         else:
             # Importar la clase del sistema de seleccion
             from Views.ViewLoginPanelConfig import View_Login as System
