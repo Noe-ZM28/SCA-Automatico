@@ -62,7 +62,7 @@ class View_Panel_Config:
             self.system_to_load = self.instance_config.get_config(
                 "system_to_load")
 
-            if self.system_to_load not in [0, 1]:
+            if self.system_to_load not in [0, 1, 2]:
                 self.system_to_load = 0
 
             self.state_form_config = "normal" if self.system_to_load == 0 else "disabled"
@@ -364,6 +364,19 @@ class View_Panel_Config:
             self.usuario_panel_config = data_config["panel_configuracion"]["usuario"]
             self.__contraseña_panel_config__ = data_config["panel_configuracion"]["contraseña"]
             self.__iv_panel_config__ = data_config["panel_configuracion"]["iv"]
+
+            # Configuracion de pines
+            if self.system_to_load == 0:
+                self.TPV_has_barrera = data_config["pines"]["TPV"]["has_barrera"]
+                self.TPV_pin_barrera = data_config["pines"]["TPV"]["barrera"]
+
+            if self.system_to_load == 1:
+                self.Entrada_pin_boton = data_config["pines"]["Entrada"]["boton"]
+                self.Entrada_pin_sensor = data_config["pines"]["Entrada"]["sensor"]
+                self.Entrada_pin_barrera = data_config["pines"]["Entrada"]["barrera"]
+
+            if self.system_to_load == 2:
+                self.Salida_pin_barrera = data_config["pines"]["Salida"]["barrera"]
 
             # Configuracion de envio
             data_config = self.instance_config.get_config(
@@ -670,6 +683,19 @@ class View_Panel_Config:
                 value=self.instance_tools.descifrar_AES(self.__db_password__, bytes.fromhex(self.__db_iv__)))
             self.variable_db_host = StringVar(value=self.db_host)
             self.variable_db_db = StringVar(value=self.db_db)
+
+            # Configuracion de pines
+            if self.system_to_load == 0:
+                self.variable_TPV_has_barrera = BooleanVar(value=self.TPV_has_barrera)
+                self.variable_TPV_pin_barrera = IntVar(value=self.TPV_pin_barrera)
+                
+            if self.system_to_load == 1:
+                self.variable_Entrada_pin_boton = IntVar(value=self.Entrada_pin_boton)
+                self.variable_Entrada_pin_sensor = IntVar(value=self.Entrada_pin_sensor)
+                self.variable_Entrada_pin_barrera = IntVar(value=self.Entrada_pin_barrera)
+                
+            if self.system_to_load == 2:
+                self.variable_Salida_pin_barrera = IntVar(value=self.Salida_pin_barrera)
 
             self.variable_destinatario_db = StringVar(
                 value=self.destinatario_DB)
@@ -1855,6 +1881,80 @@ class View_Panel_Config:
             boton_delete_email = ttk.Button(frame_botones, image=self.minus_icon, command=lambda: self.delete_email(
                 "destinatario_notificaciones", self.variable_destinatario_notificaciones, listbox_correos_notificacion))
             boton_delete_email.grid(column=0, row=1, padx=2, pady=2)
+
+
+        labelframe = LabelFrame(
+            frame_izq, text="Configuracion de pines", font=self.font_subtittle_system)
+        labelframe.grid(
+            column=0, row=3, padx=3, pady=3, sticky=NW)
+        
+        if self.system_to_load == 0:
+            frame_config_pines_TPV = LabelFrame(
+                labelframe, text="TPV", font=self.font_subtittle_system)
+            frame_config_pines_TPV.grid(
+                    column=0, row=4, padx=3, pady=3, sticky=NW)
+
+            entry_TPV_has_barrera = Checkbutton(
+                frame_config_pines_TPV, variable=self.variable_TPV_has_barrera, justify='center', text="Salida con barrera", font=self.font_text_interface)
+            entry_TPV_has_barrera.grid(
+                column=0, row=0, padx=3, pady=3, sticky=NW)
+
+            label = Label(
+                frame_config_pines_TPV, text="Pin de barrera", font=self.font_text_interface)
+            label.grid(
+                column=0, row=1, padx=3, pady=3, sticky=W)
+            self.entry_TPV_pin_barrera = Entry(
+                frame_config_pines_TPV, width=15, textvariable=self.variable_TPV_pin_barrera, justify='center', font=self.font_text_interface, validate='key', validatecommand=(self.configuracion.register(self.instance_tools.validate_entry_number), '%P'))
+            self.entry_TPV_pin_barrera.grid(
+                column=1, row=1, padx=3, pady=3)
+
+        if self.system_to_load == 1:
+            frame_config_pines_Entrada = LabelFrame(
+                labelframe, text="Entrada", font=self.font_subtittle_system)
+            frame_config_pines_Entrada.grid(
+                    column=0, row=4, padx=3, pady=3, sticky=NW)
+
+            label = Label(
+                frame_config_pines_Entrada, text="Pin de boton", font=self.font_text_interface)
+            label.grid(
+                column=0, row=0, padx=3, pady=3, sticky=W)
+            self.entry_Entrada_pin_boton = Entry(
+                frame_config_pines_Entrada, width=15, textvariable=self.variable_Entrada_pin_boton, justify='center', font=self.font_text_interface, validate='key', validatecommand=(self.configuracion.register(self.instance_tools.validate_entry_number), '%P'))
+            self.entry_Entrada_pin_boton.grid(
+                column=1, row=0, padx=3, pady=3)
+
+            label = Label(
+                frame_config_pines_Entrada, text="Pin de sensor", font=self.font_text_interface)
+            label.grid(
+                column=0, row=1, padx=3, pady=3, sticky=W)
+            self.entry_Entrada_pin_sensor = Entry(
+                frame_config_pines_Entrada, width=15, textvariable=self.variable_Entrada_pin_sensor, justify='center', font=self.font_text_interface, validate='key', validatecommand=(self.configuracion.register(self.instance_tools.validate_entry_number), '%P'))
+            self.entry_Entrada_pin_sensor.grid(
+                column=1, row=1, padx=3, pady=3)
+
+            label = Label(
+                frame_config_pines_Entrada, text="Pin de barrera", font=self.font_text_interface)
+            label.grid(
+                column=0, row=2, padx=3, pady=3, sticky=W)
+            self.entry_Entrada_pin_barrera = Entry(
+                frame_config_pines_Entrada, width=15, textvariable=self.variable_Entrada_pin_barrera, justify='center', font=self.font_text_interface, validate='key', validatecommand=(self.configuracion.register(self.instance_tools.validate_entry_number), '%P'))
+            self.entry_Entrada_pin_barrera.grid(
+                column=1, row=2, padx=3, pady=3)
+
+        if self.system_to_load == 2:
+            frame_config_pines_Salida = LabelFrame(
+                labelframe, text="Salida", font=self.font_subtittle_system)
+            frame_config_pines_Salida.grid(
+                    column=0, row=4, padx=3, pady=3, sticky=NW)
+
+            label = Label(
+                frame_config_pines_Salida, text="Pin de barrera", font=self.font_text_interface)
+            label.grid(
+                column=0, row=0, padx=3, pady=3, sticky=W)
+            self.entry_Salida_pin_barrera = Entry(
+                frame_config_pines_Salida, width=15, textvariable=self.variable_Salida_pin_barrera, justify='center', font=self.font_text_interface, validate='key', validatecommand=(self.configuracion.register(self.instance_tools.validate_entry_number), '%P'))
+            self.entry_Salida_pin_barrera.grid(
+                column=1, row=0, padx=3, pady=3)
 
         frame = Frame(seccion_configuracion_funcionamiento_interno)
         frame.grid(
@@ -5309,6 +5409,73 @@ class View_Panel_Config:
            } ])
 
 
+        tipo_cambio = "Configuracion de pines"
+
+        if self.system_to_load == 0:
+            if self.variable_TPV_has_barrera.get() != self.TPV_has_barrera:
+                estado_actual = "Si" if self.variable_TPV_has_barrera.get() else "No"
+                estado_sistema = "Si" if self.TPV_has_barrera else "No"
+                changes.append([
+                    f"Entrada con barrera: {estado_sistema} -> {estado_actual}",
+                    lambda tipo_cambio = tipo_cambio:{self.instance_config.set_config(
+                        "funcionamiento_interno", "pines", "TPV", "has_barrera", new_value=self.variable_TPV_has_barrera.get()),
+                    self.cambios_model.add_change(
+                        nombre_cambio = "Entrada con barrera",valor_anterior=estado_sistema, valor_nuevo=estado_actual,
+                        tipo_cambio = tipo_cambio, nombre_usuario= nombre_usuario_activo)
+               } ])
+
+            if self.variable_TPV_pin_barrera.get() != self.TPV_pin_barrera:
+                changes.append([
+                    f"Pin de barrera de TPV: {self.TPV_pin_barrera} -> {self.variable_TPV_pin_barrera.get()}",
+                    lambda tipo_cambio = tipo_cambio:{self.instance_config.set_config(
+                        "funcionamiento_interno", "pines", "TPV", "barrera", new_value=self.variable_TPV_pin_barrera.get()),
+                        self.cambios_model.add_change(
+                            nombre_cambio = "Pin de barrera",valor_anterior=self.TPV_pin_barrera, valor_nuevo=self.variable_TPV_pin_barrera.get(),
+                            tipo_cambio = tipo_cambio, nombre_usuario= nombre_usuario_activo)
+            } ])
+
+        if self.system_to_load == 1:
+            if self.variable_Entrada_pin_boton.get() != self.Entrada_pin_boton:
+                changes.append([
+                    f"Pin de boton de Entrada: {self.Entrada_pin_boton} -> {self.variable_Entrada_pin_boton.get()}",
+                    lambda tipo_cambio = tipo_cambio:{self.instance_config.set_config(
+                        "funcionamiento_interno", "pines", "Entrada", "boton", new_value=self.variable_Entrada_pin_boton.get()),
+                        self.cambios_model.add_change(
+                            nombre_cambio = "Pin de boton",valor_anterior=self.Entrada_pin_boton, valor_nuevo=self.variable_Entrada_pin_boton.get(),
+                            tipo_cambio = tipo_cambio, nombre_usuario= nombre_usuario_activo)
+            } ])
+
+            if self.variable_Entrada_pin_sensor.get() != self.Entrada_pin_sensor:
+                changes.append([
+                    f"Pin de sensor de Entrada: {self.Entrada_pin_sensor} -> {self.variable_Entrada_pin_sensor.get()}",
+                    lambda tipo_cambio = tipo_cambio:{self.instance_config.set_config(
+                        "funcionamiento_interno", "pines", "Entrada", "sensor", new_value=self.variable_Entrada_pin_sensor.get()),
+                        self.cambios_model.add_change(
+                            nombre_cambio = "Pin de sensor",valor_anterior=self.Entrada_pin_sensor, valor_nuevo=self.variable_Entrada_pin_sensor.get(),
+                            tipo_cambio = tipo_cambio, nombre_usuario= nombre_usuario_activo)
+            } ])
+
+            if self.variable_Entrada_pin_barrera.get() != self.Entrada_pin_barrera:
+                changes.append([
+                    f"Pin de barrera de Entrada: {self.Entrada_pin_barrera} -> {self.variable_Entrada_pin_barrera.get()}",
+                    lambda tipo_cambio = tipo_cambio:{self.instance_config.set_config(
+                        "funcionamiento_interno", "pines", "Entrada", "barrera", new_value=self.variable_Entrada_pin_barrera.get()),
+                        self.cambios_model.add_change(
+                            nombre_cambio = "Pin de barrera",valor_anterior=self.Entrada_pin_barrera, valor_nuevo=self.variable_Entrada_pin_barrera.get(),
+                            tipo_cambio = tipo_cambio, nombre_usuario= nombre_usuario_activo)
+            } ])
+
+        if self.system_to_load == 2:
+            if self.variable_Salida_pin_barrera.get() != self.Salida_pin_barrera:
+                changes.append([
+                    f"Pin de barrera de Salida: {self.Salida_pin_barrera} -> {self.variable_Salida_pin_barrera.get()}",
+                    lambda tipo_cambio = tipo_cambio:{self.instance_config.set_config(
+                        "funcionamiento_interno", "pines", "Salida", "barrera", new_value=self.variable_Salida_pin_barrera.get()),
+                        self.cambios_model.add_change(
+                            nombre_cambio = "Pin de barrera",valor_anterior=self.Salida_pin_barrera, valor_nuevo=self.variable_Salida_pin_barrera.get(),
+                            tipo_cambio = tipo_cambio, nombre_usuario= nombre_usuario_activo)
+            } ])
+
 
         if len(changes) == 0:
             mb.showerror("Alerta", "Sin cambios para guardar")
@@ -5434,6 +5601,18 @@ class View_Panel_Config:
         self.variable_destinatario_corte.set(self.destinatario_corte)
         self.variable_destinatario_notificaciones.set(
             self.destinatario_notificaciones)
+
+        if self.system_to_load == 0:
+            self.variable_TPV_has_barrera.set(self.TPV_has_barrera)
+            self.variable_TPV_pin_barrera.set(self.TPV_pin_barrera)
+            
+        if self.system_to_load == 1:
+            self.variable_Entrada_pin_boton.set(self.Entrada_pin_boton)
+            self.variable_Entrada_pin_sensor.set(self.Entrada_pin_sensor)
+            self.variable_Entrada_pin_barrera.set(self.Entrada_pin_barrera)
+            
+        if self.system_to_load == 2:
+            self.variable_Salida_pin_barrera.set(self.Salida_pin_barrera)
 
         self.variable_id_vendor_impresora.set(self.printer_idVendor)
         self.variable_id_product_impresora.set(self.printer_idProduct)

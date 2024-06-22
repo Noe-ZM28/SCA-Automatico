@@ -320,18 +320,18 @@
             "host": "localhost",
             "db": "db_test"
         },
-        "pines":{
+        "pines": {
             "TPV": {
-                "has_barrera": true,
+                "has_barrera": false,
                 "barrera": 0
             },
             "Entrada": {
-                "boton": 0,
-                "sensor": 0,
-                "barrera": 0
+                "boton": 1,
+                "sensor": 2,
+                "barrera": 3
             },
             "Salida": {
-                "barrera": 0
+                "barrera": 4
             }
         }
     }
