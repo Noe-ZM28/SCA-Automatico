@@ -1129,18 +1129,18 @@ class View_Panel_Config:
 
         entry_imprime_contra_parabrisas = Checkbutton(
             labelframe_formulario_config_estacionamiento, variable=self.variable_imprime_contra_parabrisas, justify='center', text="Imprime contra de parabrisas", font=self.font_text_interface)
-        entry_imprime_contra_parabrisas.grid(
-            column=0, row=7, padx=0, pady=0, sticky=NW)
+        # entry_imprime_contra_parabrisas.grid(
+        #     column=0, row=7, padx=0, pady=0, sticky=NW)
 
         entry_imprime_contra_localizacion = Checkbutton(
             labelframe_formulario_config_estacionamiento, variable=self.variable_imprime_contra_localizacion, justify='center', text="Imprime contra de localizacion", font=self.font_text_interface)
-        entry_imprime_contra_localizacion.grid(
-            column=0, row=8, padx=0, pady=0, sticky=NW)
+        # entry_imprime_contra_localizacion.grid(
+        #     column=0, row=8, padx=0, pady=0, sticky=NW)
 
         entry_solicita_datos_del_auto = Checkbutton(
             labelframe_formulario_config_estacionamiento, variable=self.variable_solicita_datos_del_auto, justify='center', text="Solicita datos del auto", font=self.font_text_interface)
-        entry_solicita_datos_del_auto.grid(
-            column=0, row=9, padx=0, pady=0, sticky=NW)
+        # entry_solicita_datos_del_auto.grid(
+        #     column=0, row=9, padx=0, pady=0, sticky=NW)
 
         entry_habilita_impresion_boleto_perdido = Checkbutton(
             labelframe_formulario_config_estacionamiento, variable=self.variable_habilita_impresion_boleto_perdido, justify='center', text="Habilita impresion de boleto perdido", font=self.font_text_interface, state=self.state_form_config)
@@ -1166,23 +1166,23 @@ class View_Panel_Config:
 
         label = Label(
             frame, text="Contra de\nparabrisas", font=self.font_text_interface)
-        label.grid(
-            column=0, row=1, padx=3, pady=3, sticky=NW)
+        # label.grid(
+        #     column=0, row=1, padx=3, pady=3, sticky=NW)
 
-        combobox_size_font_ticket = ttk.Combobox(
-            frame, width=2, state="readonly", textvariable=self.variable_size_font_contra_parabrisas, font=self.font_text_interface, justify='center', values=list_size_font_tiket)
-        combobox_size_font_ticket.grid(
-            column=1, row=1, padx=3, pady=3, sticky=W)
+        # combobox_size_font_ticket = ttk.Combobox(
+        #     frame, width=2, state="readonly", textvariable=self.variable_size_font_contra_parabrisas, font=self.font_text_interface, justify='center', values=list_size_font_tiket)
+        # combobox_size_font_ticket.grid(
+        #     column=1, row=1, padx=3, pady=3, sticky=W)
 
         label = Label(
             frame, text="Contra de\nlocalizacion", font=self.font_text_interface)
-        label.grid(
-            column=0, row=2, padx=3, pady=3, sticky=NW)
+        # label.grid(
+        #     column=0, row=2, padx=3, pady=3, sticky=NW)
 
-        combobox_size_font_ticket = ttk.Combobox(
-            frame, width=2, state="readonly", textvariable=self.variable_size_font_contra_localizacion, font=self.font_text_interface, justify='center', values=list_size_font_tiket)
-        combobox_size_font_ticket.grid(
-            column=1, row=2, padx=3, pady=3, sticky=W)
+        # combobox_size_font_ticket = ttk.Combobox(
+        #     frame, width=2, state="readonly", textvariable=self.variable_size_font_contra_localizacion, font=self.font_text_interface, justify='center', values=list_size_font_tiket)
+        # combobox_size_font_ticket.grid(
+        #     column=1, row=2, padx=3, pady=3, sticky=W)
 
         if self.system_to_load == 0:
             labelframe = LabelFrame(
