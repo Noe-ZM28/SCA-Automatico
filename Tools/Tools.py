@@ -920,6 +920,19 @@ class Tools:
             return None
 
 
+    def is_valid_pin(self, pin):#, mode=None):
+        # Listas de pines válidos para el esquema de numeración BCM y BOARD
+        valid_pins_bcm =   [2, 3, 4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 14, 15, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
+        valid_pins_board = [3, 5, 7, 11, 13, 15, 19, 21, 23, 8, 10, 24, 26, 29, 31, 33, 35, 37, 32, 36, 38, 40, 12, 16, 18, 22]
+
+        return pin in valid_pins_bcm
+        
+        # if mode == GPIO.BCM:
+        #     return pin in valid_pins_bcm
+        # elif mode == GPIO.BOARD:
+        #     return pin in valid_pins_board
+        # else:
+        #     return False
 
 class BlinkingLabel:
     """

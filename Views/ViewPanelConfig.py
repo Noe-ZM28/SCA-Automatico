@@ -5226,12 +5226,12 @@ class View_Panel_Config:
         try:
             if self.variable_db_usuario.get() != self.db_usser or self.__variable_db_contraseña__.get() != self.instance_tools.descifrar_AES(self.__db_password__, bytes.fromhex(self.__db_iv__)) or self.variable_db_host.get() != self.db_host or self.variable_db_db.get() != self.db_db:
                 nombre_usuario_activo = "N/A"
-                
+
             else:
                 nombre_usuario_activo = self.DB.nombre_usuario_activo()
 
             if nombre_usuario_activo is None:
-                raise SystemError("No se puede guarda la informacion ya que no has iniciado sesion, reinicia el sistema e inicia sesion para poder hacert cambios en el sistema.\n\nSi consideras que se trata de un error ponte en contacto con un administrador inmediatamente")
+                raise SystemError("No se puede guarda la informacion ya que no has iniciado sesion, reinicia el sistema e inicia sesion para poder hacer cambios en el sistema.\n\nSi consideras que se trata de un error ponte en contacto con un administrador inmediatamente")
 
             self.validate_data_interna()
 
@@ -5578,6 +5578,31 @@ class View_Panel_Config:
         if self.variable_usuario_panel_config.get() == "" or self.variable_contraseña_panel_config.get() == "":
             raise WithoutParameter(
                 "Las credenciales para el usuario del panel de configuracion")
+
+
+        if self.system_to_load == 0:
+            if self.variable_TPV_has_barrera.get() and (self.instance_tools.is_valid_pin(self.variable_TPV_pin_barrera.get()) is False):
+                raise SystemError(
+                    "Esta habilitada la barrera de salida para la TPV, ingrese un pin valido para la barrera de salida de la TPV")
+            
+        if self.system_to_load == 1:
+            if self.instance_tools.is_valid_pin(self.variable_Entrada_pin_boton.get()) is False:
+                raise SystemError(
+                    "Ingrese un pin valido para la el boton de entrada")
+
+            if self.instance_tools.is_valid_pin(self.variable_Entrada_pin_sensor.get()) is False:
+                raise SystemError(
+                    "Ingrese un pin valido para el sensor de entrada")
+
+            if self.instance_tools.is_valid_pin(self.variable_Entrada_pin_barrera.get()) is False:
+                raise SystemError(
+                    "Ingrese un pin valido para la barrera de entrada")
+
+        if self.system_to_load == 2:
+            if self.instance_tools.is_valid_pin(self.variable_Salida_pin_barrera.get()) is False:
+                raise SystemError(
+                    "Ingrese un pin valido para la barrera de salida")
+
 
     def clean_data_form_interna(self):
         self.variable_system_to_load.set(

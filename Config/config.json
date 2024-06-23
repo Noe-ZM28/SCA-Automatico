@@ -322,16 +322,16 @@
         },
         "pines": {
             "TPV": {
-                "has_barrera": false,
-                "barrera": 0
+                "has_barrera": true,
+                "barrera": 13
             },
             "Entrada": {
-                "boton": 1,
-                "sensor": 2,
-                "barrera": 3
+                "boton": 21,
+                "sensor": 11,
+                "barrera": 5
             },
             "Salida": {
-                "barrera": 4
+                "barrera": 9
             }
         }
     }
