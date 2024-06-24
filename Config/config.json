@@ -138,7 +138,7 @@
             "color_alerta": "#ff0000"
         }
     },
-    "tarifa": {
+    "tariaf": {
         "tarifa_boleto_perdido": 250,
         "tipo_tarifa_sistema": false,
         "tarifa_simple": {
