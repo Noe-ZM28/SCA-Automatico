@@ -2,14 +2,21 @@ from datetime import datetime, timedelta
 from escpos.printer import Usb
 import traceback
 import tkinter as tk
+from tkinter import messagebox as mb
 from Models.Model import Operacion
 from Tools.Tools import Tools
 from time import sleep
+from Tools.Exceptions import WithoutParameter, SystemError, NotExist
 
 import RPi.GPIO as io           # Importa libreria de I/O (entradas / salidas)
+from Controllers.ConfigController import ConfigController
+from Controllers.PrinterController import PrinterController
 
 from enum import Enum
+instance_config = ConfigController()
+printer_controller = PrinterController()
 
+data_config = instance_config.get_config("funcionamiento_interno", "pines")
 
 class Colors(Enum):
     """
@@ -62,17 +69,14 @@ class Pines(Enum):
 
     (En caso de modificar un PIN tambien modificar su comentario)
     """
-    PIN_BARRERA:int = 13 # gpio13,pin33,Salida 
-    PIN_BOTON:int = 18 # gpio18,pin12,Salida 
-    PIN_SENSOR_AUTO:int = 4 # gpio4,pin7,Entrada 
-    PIN_SENSOR_BOLETO:int = 23 # gpio23,pin16,Salida 
+    PIN_BARRERA:int = data_config["Entrada"]["barrera"]# 13 # gpio13,pin33,Salida 
+    PIN_BOTON:int =data_config["Entrada"]["boton"]# 18 # gpio18,pin12,Salida 
+    PIN_SENSOR_AUTO:int = data_config["Entrada"]["sensor"]#4 # gpio4,pin7,Entrada 
 
 
     PIN_INDICADOR_BARRERA:int = 26 # gpio26,pin37,Salida 
     PIN_INDICADOR_BOTON:int = 6 # gpio6,pin31,Salida
-
     PIN_INDICADOR_SENSOR_AUTO:int = 19 # gpio19,pin35,Salida
-    PIN_INDICADOR_SENSOR_BOLETO:int = 0
 
 class State(Enum):
     ON = 0
@@ -85,7 +89,6 @@ io.setwarnings(False)           # no señala advertencias de pin ya usados
 
 io.setup(Pines.PIN_SENSOR_AUTO.value,io.IN)             # configura en el micro las entradas
 io.setup(Pines.PIN_BOTON.value,io.IN)             # configura en el micro las entradas
-io.setup(Pines.PIN_SENSOR_BOLETO.value,io.IN)             # configura en el micro las entradas
 
 
 io.setup(Pines.PIN_BARRERA.value,io.OUT)           # configura en el micro las salidas
@@ -107,7 +110,7 @@ BanImpresion = State.ON.value #No ha impreso
 logo_1 = "LOGO1.jpg"
 AutoA = "AutoA.png"
 qr_imagen = "reducida.png"
-
+ 
 nombre_estacionamiento = 'Hidalgo 401'
 nombre_entrada = "Punto Santa Rosa"
 
@@ -118,7 +121,7 @@ font_reloj = ('Arial', 65)
 
 font_etiquetas = ('Arial', 30, 'bold')
 
-fullscreen = True
+fullscreen = False
 
 
 class Entrada:
@@ -147,10 +150,6 @@ class Entrada:
             # Configura la ventana para que ocupe toda la pantalla
             # self.root.geometry(f"{screen_width}x{screen_height}+0+0")
 
-            self.root.attributes('-fullscreen', True)  
-            self.fullScreenState = False
-            self.root.bind("<F11>", self.enter_fullscreen)
-            self.root.bind("<Escape>", self.exit_fullscreen)
 
         # Colocar el LabelFrame en las coordenadas calculadas
         self.principal = tk.LabelFrame(self.root)
@@ -240,32 +239,6 @@ class Entrada:
         # Dar el foco al entry de la tarjeta
         self.entry_numero_tarjeta.focus()
 
-    def interrupcion_SENSOR_BOLETO(self):
-        """Detecta presencia de boleto"""
-        global BanSenBoleto
-        # Si el sensor de boleto detecta un boleto
-        if io.input(Pines.PIN_SENSOR_BOLETO.value):
-
-            # Apagar el indicador de barrera
-            io.output(Pines.PIN_INDICADOR_BARRERA.value, State.OFF.value)#con un "1" se apaga el led
-
-            # Cambiar el estado del sensor de boleto a apagado
-            BanSenBoleto = State.OFF.value
-
-            # Imprimir en la consola que no siente boleto
-            print('no siente boleto')
-
-        # Si el sensor de boleto no detecta un boleto
-        else:                
-            # Encender el indicador de barrera
-            io.output(Pines.PIN_INDICADOR_BARRERA.value ,State.ON.value)     
-                         
-            # Cambiar el estado del sensor de boleto a encendido
-            BanSenBoleto = State.ON.value
-
-            # Imprimir en la consola que siente boleto
-            print('siente boleto')
-
     def interrupcion_SENSOR_AUTO(self):
         """Detecta presencia de automovil"""
         global BanLoop
@@ -321,7 +294,6 @@ class Entrada:
     # Agregar eventos para detectar los cambios en los sensores y botones
     io.add_event_detect(Pines.PIN_SENSOR_AUTO.value, io.BOTH, callback = interrupcion_SENSOR_AUTO)
     io.add_event_detect(Pines.PIN_BOTON.value, io.BOTH, callback = interrupcion_DETECCION_BOLETO)
-    io.add_event_detect(Pines.PIN_SENSOR_BOLETO.value, io.BOTH, callback = interrupcion_SENSOR_BOLETO)
 
     def check_inputs(self):
         """
@@ -429,89 +401,33 @@ class Entrada:
 
 
     def generar_boleto(self):
-        """
-        Genera un boleto de entrada.
+        try:
+            # Obtener la placa del vehiculo desde la variable Placa
+            # placa = self.Placa.get()
 
-        :return: None
-        """
-        # Obtener la placa del vehículo
-        placa = self.Placa.get()
-        
-        # Inicializar el corte a 0
-        Corte = 0
+            # Validar si se requiere una placa y si no se ingreso ninguna
+            # if not placa and self.requiere_placa:
+            #     raise WithoutParameter("Placa del auto")
 
-        # Obtener el máximo folio de la base de datos
-        MaxFolio=self.DB.MaxfolioEntrada()
-        
-        # Incrementar el folio en 1
-        folio_boleto = MaxFolio + 1
-        
-        # Asignar el folio al atributo MaxId
-        self.MaxId.set(folio_boleto)
+            folio_boleto = self.DB.MaxfolioEntrada() + 1
+            self.MaxId.set(folio_boleto)
 
-        # Cifrar el folio con el método de la base de datos
-        folio_cifrado = self.instance_tools.cifrar_folio(folio = folio_boleto)
-        # print(f"QR entrada: {folio_cifrado}")
+            state = printer_controller.print_ticket(folio_boleto, "placa")
 
-        # Generar el código QR con el método de la base de datos
-        self.instance_tools.generar_QR(folio_cifrado)
+            if state != None:
+                mb.showwarning("Alerta", state)
+                state = ""
+                return
 
-        # Obtener la fecha y hora de entrada en formato deseado
-        fechaEntro = datetime.today().strftime("%Y-%m-%d %H:%M:%S")
-        
-        # Crear una tupla con los datos de la entrada
-        datos=(fechaEntro, Corte, placa)
+            state=f"Se genera boleto"
 
-        # Crear un objeto de impresora USB con los parámetros dados
-        printer = Usb(0x04b8, 0x0e15, 0)
+        except Exception as e:
+            state=e
 
-        # Imprimir la imagen del logo (comentado)
-        printer.image(logo_1)
-        
-        # Imprimir una línea de separación
-        printer.text("--------------------------------------\n")
-        
-        # Centrar el texto y cambiar el tamaño
-        printer.set("center")
-        
-        # Imprimir el título del boleto
-        printer.text("BOLETO DE ENTRADA\n")
-        
-        # Centrar el texto y cambiar el tamaño y la altura
-        printer.set(height=2, align='center')
-        
-        # Imprimir el folio del boleto con el formato deseado
-        printer.text(f'Folio 000{folio_boleto}\n')
-
-        # Centrar el texto
-        printer.set("center")        
-        
-        # Imprimir la fecha y hora de entrada sin los segundos
-        printer.text(f'Entro: {fechaEntro[:-3]}\n')
-        
-        # Imprimir el nombre del estacionamiento
-        printer.text(f'{nombre_estacionamiento}\n')
-        
-        # Imprimir el nombre de la entrada
-        printer.text(f'Entrada {nombre_entrada}\n')
-        
-        # Alinear el texto a la izquierda
-        printer.set(align = "left")
-        
-        # Imprimir la imagen del código QR
-        printer.image(qr_imagen)
-
-        # Imprimir una línea de separación
-        printer.text("--------------------------------------\n")
-        
-        # Cortar el papel
-        printer.cut()
-
-        # Cerrar la conexión con la impresora
-        printer.close()
-
-        # Agregar el registro RFID a la base de datos con el método correspondiente
-        self.DB.altaRegistroRFID(datos)
+        finally:
+            self.label_informacion.config(text=state)
+            self.entry_numero_tarjeta.focus()
+            self.Placa.set("")
 
 
     def Pensionados(self, event):

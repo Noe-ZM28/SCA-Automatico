@@ -1,12 +1,9 @@
-# from Controllers.ConfigController import ConfigController
 from Views.ViewPanelConfig import View_Panel_Config
-# from Views.ViewBase import ViewBase
-# from Views.ViewHitoryChanges import ViewHitoryChanges
-from Views.ViewCobro import ViewCobro
-# from Views.ViewLoginSystem import LoginSystem
+from Views.test_pantalla_entrada import Entrada
+from Views.test_pantalla_salida import Salida
 
 
-# ViewCobro()
-# View_Login()
+# Entrada()
+# Salida()
 View_Panel_Config()
 

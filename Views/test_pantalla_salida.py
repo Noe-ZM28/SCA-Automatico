@@ -4,10 +4,14 @@ import traceback
 import tkinter as tk
 from Models.Model import Operacion
 from time import sleep
-
+from Controllers.ConfigController import ConfigController
+from Tools.Tools import Tools
 import RPi.GPIO as io           # Importa libreria de I/O (entradas / salidas)
 
 from enum import Enum
+instance_config = ConfigController()
+__instance_tools__ = Tools()
+data_config = instance_config.get_config("funcionamiento_interno", "pines")
 
 
 class System_Messages(Enum):
@@ -38,7 +42,7 @@ class Pines(Enum):
 
     (En caso de modificar un PIN tambien modificar su comentario)
     """
-    PIN_BARRERA:int = 13 # gpio13,pin33,Salida
+    PIN_BARRERA:int = data_config["Salida"]["barrera"] #13 # gpio13,pin33,Salida
 
     PIN_INDICADOR_BARRERA:int = 26 # gpio26,pin37,Salida
 
@@ -65,10 +69,10 @@ font_reloj = ('Arial', 65)
 fullscreen = True
 
 
-class Entrada:
+class Salida:
     def __init__(self):
         """
-        Constructor de la clase Entrada.
+        Constructor de la clase Salida.
 
         Inicializa los atributos y crea la interfaz gráfica.
         """
@@ -89,10 +93,6 @@ class Entrada:
             # Configura la ventana para que ocupe toda la pantalla
             # self.root.geometry(f"{screen_width}x{screen_height}+0+0")
 
-            self.root.attributes('-fullscreen', True)  
-            self.fullScreenState = False
-            self.root.bind("<F11>", self.enter_fullscreen)
-            self.root.bind("<Escape>", self.exit_fullscreen)
 
         # Colocar el LabelFrame en las coordenadas calculadas
         self.principal = tk.LabelFrame(self.root)
@@ -353,6 +353,6 @@ class Entrada:
 
 
 if __name__ == '__main__':
-    # Crear un objeto de la clase Entrada
-    Entrada()
+    # Crear un objeto de la clase Salida
+    Salida()
 
