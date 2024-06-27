@@ -6,4 +6,3 @@ from Views.test_pantalla_salida import Salida
 # Entrada()
 # Salida()
 # View_Panel_Config()
-
