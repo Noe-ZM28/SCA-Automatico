@@ -138,7 +138,7 @@
             "color_alerta": "#ff0000"
         }
     },
-    "tariaf": {
+    "tarifa": {
         "tarifa_boleto_perdido": 250,
         "tipo_tarifa_sistema": false,
         "tarifa_simple": {
@@ -318,7 +318,7 @@
             "password": "SZJcMWiwc9nd9uSO/Rc8Ww==",
             "iv": "6f3c008a5d37219a2c0770cab61445fe",
             "host": "localhost",
-            "db": "db_test"
+            "db": "db_pino_suarez_27"
         },
         "pines": {
             "TPV": {
