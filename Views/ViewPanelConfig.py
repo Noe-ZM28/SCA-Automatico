@@ -17,7 +17,7 @@ from Tools.Tools import Tools
 from Tools.Security import Secure, ask_security_question
 from Models.Model import Operacion
 from Models.Queries import Cambios
-
+import traceback
 
 class View_Panel_Config:
     def __init__(self) -> None:
@@ -5148,6 +5148,7 @@ class View_Panel_Config:
             return
         except Exception as e:
             mb.showerror("Error", e)
+            traceback.print_exc()
             return
         finally:
             if self.visible_password_info_estacionamiento.get():

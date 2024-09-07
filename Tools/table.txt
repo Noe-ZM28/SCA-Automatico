@@ -6,5 +6,5 @@ CREATE TABLE `Cambios` (
   `tipo_cambio` varchar(255) NOT NULL,
   `hora` datetime NOT NULL,
   `nombre_usuario` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`);
 )

@@ -256,8 +256,7 @@ class ViewEntrada:
 
     def Pensionados(self, event):
         try:
-            numero_tarjeta = self.instance_tools.get_id_from_QR(
-                self.Placa.get())
+            numero_tarjeta = self.Placa.get()
 
             print(numero_tarjeta)
             Existe = self.DB.ValidarPen(numero_tarjeta)

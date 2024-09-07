@@ -48,7 +48,6 @@ class Tools:
         - desconectar: Cierra la ventana principal y detiene el hilo en el que se ejecuta.
         - desactivar: Desactiva la interfaz.
         - activar: Activa la interfaz.
-        - get_id_from_QR: Obtiene el número de tarjeta del pensionado a partir del texto QR.
         - obtener_datos_servidor: Realiza una consulta al servidor y devuelve los datos obtenidos.
     """
 
@@ -189,7 +188,7 @@ class Tools:
             ImageTk.PhotoImage: Objeto PhotoImage que representa el icono.
         """
         icon = Image.open(image)
-        icon = icon.resize(size, Image.ANTIALIAS)
+        icon = icon.resize(size, Image.LANCZOS)
         return ImageTk.PhotoImage(icon)
 
     def cifrar_folio(self, folio: int) -> str:
@@ -469,28 +468,6 @@ class Tools:
             main_window (Toplevel): Ventana.
         """
         main_window.deiconify()
-
-    def get_id_from_QR(self, qr_text: str) -> str:
-        """
-        Obtiene el número de tarjeta del pensionado a partir del texto QR.
-
-        Args:
-            qr_text (str): El texto QR que contiene la informacion necesaria.
-
-        Returns:
-            str: El número de tarjeta del pensionado.
-
-        Example:
-        >>> qr_text = "Pension-NombreEstacionamiento-12345"
-        >>> id_numero = estacionamiento.get_id_from_QR(qr_text)
-        >>> print(id_numero)
-        "12345"
-        """
-        # La posicion del identificador es determinada por la longitud de la cadena f"Pension-{self.nombre_estacionamiento}-"
-        position_id = len(f"Pension-{self.nombre_estacionamiento}-")
-
-        # Retorna el número de tarjeta del pensionado
-        return qr_text[position_id:]
 
     def visible_password(self, button: ttk.Button, entry_password: Entry, visible: BooleanVar, show_password_icon, hide_password_icon) -> None:
         """
