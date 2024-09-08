@@ -2886,8 +2886,6 @@ class ViewCobro:
             self.limpiar_datos_pago()
             return
 
-        numtarjeta = self.instance_tools.get_id_from_QR(numtarjeta)
-
         resultado = self.DB.ValidarRFID(numtarjeta)
 
         if not resultado:
@@ -3010,8 +3008,6 @@ class ViewCobro:
             # Verificar que se ha seleccionado una forma de pago
             if not self.variable_tipo_pago_transferencia.get() and not self.variable_tipo_pago_efectivo.get():
                 raise SystemError("Selecciona una forma de pago")
-
-            tarjeta = self.instance_tools.get_id_from_QR(tarjeta)
 
             Existe = self.DB.ValidarRFID(tarjeta)
 
@@ -3141,8 +3137,6 @@ class ViewCobro:
                 self.campo_texto_contraseña_pensionados.focus()
                 raise SystemError("Contraseña incorrecta")
 
-            tarjeta = self.instance_tools.get_id_from_QR(tarjeta)
-
             id_pension = self.DB.ValidarRFID(tarjeta)
 
             if not id_pension:
@@ -3186,7 +3180,7 @@ class ViewCobro:
         else:
             for fila in respuesta:
                 self.scroll_pensionados_dentro.insert(
-                    tk.END, f"{cont+1}) Pension-{self.nombre_estacionamiento.replace(' ', '_')}-{fila[0]}\n")
+                    tk.END, f"{cont+1}) {fila[0]}\n")
                 self.scroll_pensionados_dentro.insert(
                     tk.END, f"   {fila[1]} {fila[2]}\n")
                 self.scroll_pensionados_dentro.insert(
@@ -3416,8 +3410,6 @@ class ViewCobro:
                 self.caja_texto_numero_tarjeta.focus()
                 raise WithoutParameter(
                     "El número de tarjeta del pensionado a modificar")
-
-            numero_tarjeta = self.instance_tools.get_id_from_QR(numero_tarjeta)
 
             if len(contraseña) == 0:
                 self.campo_texto_contraseña_pensionados.focus()
