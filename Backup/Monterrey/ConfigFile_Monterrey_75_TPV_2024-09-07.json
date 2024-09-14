@@ -30,7 +30,7 @@
         "configuracion_sistema": {
             "impresora": {
                 "idVendor": "04b8",
-                "idProduct": "0202"
+                "idProduct": "0e15"
             },
             "formatos_fecha": [
                 "%Y-%m-%d %H:%M:%S",
@@ -96,9 +96,9 @@
             "size_text_button_font": 11,
             "size_text_font_subtittle_system": 12,
             "size_text_font_tittle_system": 12,
-            "formato_hora_interface": 1,
-            "formato_hora_boleto": 1,
-            "formato_hora_reloj_expedidor_boleto": 1,
+            "formato_hora_interface": 0,
+            "formato_hora_boleto": 0,
+            "formato_hora_reloj_expedidor_boleto": 14,
             "fuente": "Arial",
             "color_botones_interface": "#062546",
             "color_letra_botones_interface": "#ffffff",
@@ -495,12 +495,12 @@
         "pines": {
             "TPV": {
                 "has_barrera": true,
-                "barrera": 17
+                "barrera": 13
             },
             "Entrada": {
-                "boton": 20,
-                "sensor": 21,
-                "barrera": 17
+                "boton": 21,
+                "sensor": 11,
+                "barrera": 5
             },
             "Salida": {
                 "barrera": 9

@@ -27,6 +27,38 @@ from Controllers.CobroController import CobroController
 from Controllers.EmailController import SendData
 from Controllers.PrinterController import PrinterController
 
+from enum import Enum
+import RPi.GPIO as io
+
+instance_config = ConfigController()
+
+data_config = instance_config.get_config("funcionamiento_interno", "pines")
+HAS_BARRERA:bool = data_config["TPV"]["has_barrera"]
+
+
+class Pines(Enum):
+    """
+    Enumeración de pines y descripcion
+
+    (En caso de modificar un PIN tambien modificar su comentario)
+    """
+    PIN_BARRERA:int = data_config["TPV"]["barrera"]
+
+    PIN_INDICADOR_BARRERA:int = 26 
+
+class State(Enum):
+    ON = 0
+    OFF = 1
+
+io.setmode(io.BCM)              # modo in/out pin del micro
+io.setwarnings(False)           # no señala advertencias de pin ya usados
+
+io.setup(Pines.PIN_BARRERA.value,io.OUT)
+# io.setup(Pines.PIN_INDICADOR_BARRERA.value,io.OUT)  
+
+io.output(Pines.PIN_BARRERA.value, State.OFF.value)
+# io.output(Pines.PIN_INDICADOR_BARRERA.value, State.OFF.value)
+
 
 class ViewCobro:
     def __init__(self) -> None:
@@ -279,8 +311,6 @@ class ViewCobro:
         self.Placa = tk.StringVar()
         self.entry_placa = tk.Entry(
             frame_info_placa, width=20, textvariable=self.Placa, font=self.font_entry_placa, justify='center')
-        self.entry_placa.bind(
-            '<Return>', self.Pensionados)
         self.entry_placa.grid(
             column=0, row=1, padx=2, pady=2)
 
@@ -630,10 +660,20 @@ class ViewCobro:
         bcambio.grid(
             column=0, row=1, padx=5, pady=5)
 
-        self.label15 = tk.Label(
-            labelframe_info_cobro, text="Viabilidad de cobro", font=self.font_text_interface)
-        self.label15.grid(
-            column=0, row=3, padx=3, pady=3)
+        if(HAS_BARRERA):
+            # SALIDA DE PENSIONADOS
+            labelframe_SalidaPensionado=tk.LabelFrame(labelframe_info_cobro, text="Salida de pensionados", font=self.font_subtittle_system)
+            labelframe_SalidaPensionado.grid(column=0, row=3, padx=3, pady=3)
+
+            self.NumeroTarjeta=tk.StringVar()
+            label=tk.Label(labelframe_SalidaPensionado, text="Número de tarjeta", font=self.font_text_entry_interface)
+            label.grid(column=0, row=0, padx=0, pady=0)
+
+            self.entry_numrero_tarjeta=tk.Entry(labelframe_SalidaPensionado, width=10, textvariable=self.NumeroTarjeta, font=self.font_text_entry_interface)
+            self.entry_numrero_tarjeta.grid(column=1, row=0, padx=4, pady=4)
+
+            BotonSalidaPensinados=tk.Button(labelframe_SalidaPensionado, text="Salida", command=self.PensionadosSalida, width=6, height=1, anchor="center", background=self.button_color, fg=self.button_letters_color, font=self.font_botones_interface,)
+            BotonSalidaPensinados.grid(column=2, row=0, padx=4, pady=4) 
 
         self.labelPerdido_principal = tk.LabelFrame(
             self.modulo_cobro, text="Boletos Dañados/Perdidos", font=self.font_tittle_system)
@@ -842,11 +882,6 @@ class ViewCobro:
                 self.entryfolio.focus()
                 return
 
-            # Si se detecta la palabra "pension" en el dato, realizar accion para PensionadosSalida
-            if "pension" in datos.lower():
-                self.PensionadosSalida()
-                return
-
             # Verificar si el dato parece ser un folio o una promocion
             if len(datos) > 20:
                 raise SystemError("Leer primero el folio")
@@ -904,8 +939,6 @@ class ViewCobro:
         salida = self.fecha_salida.get()
 
         if salida != "":
-            self.label15.configure(text=("Este Boleto ya Tiene cobro"))
-
             # Realiza una consulta con el folio seleccionado para obtener informacion adicional del boleto
             respuesta = self.DB.consulta({self.folio.get()})
 
@@ -943,7 +976,6 @@ class ViewCobro:
 
         # Si el valor de salida tiene menos de 5 caracteres, significa que no ha sido cobrado
         self.TarifaPreferente.set("Normal")
-        self.label15.configure(text="Lo puedes COBRAR")
 
         # Obtiene la fecha actual
         Salida = datetime.strptime(datetime.now().strftime(
@@ -1029,6 +1061,8 @@ class ViewCobro:
 
             state = self.printer_controller.print_payment_ticket(
                 data)
+            
+            self.AbrirBarrera(Pines.PIN_BARRERA)
 
             if state != None:
                 raise SystemError(state)
@@ -1065,8 +1099,6 @@ class ViewCobro:
             TiempoTotal = self.TiempoTotal.get()
             TarifaPreferente = self.TarifaPreferente.get()
             importe = self.importe.get()
-
-            self.label15.configure(text="SI se debe modificar")
 
             # Valor para verificar el cobro (valor de ejemplo)
             vobo = "lmf"
@@ -1232,7 +1264,7 @@ class ViewCobro:
         :return: None
         """
         try:
-            numtarjeta = self.instance_tools.get_id_from_QR(self.folio.get())
+            numtarjeta = self.NumeroTarjeta.get()
 
             # Valida si existe un pensionado con ese número de tarjeta
             respuesta = self.DB.ValidarTarj(numtarjeta)
@@ -1272,21 +1304,15 @@ class ViewCobro:
 
             mb.showinfo("Pension", 'Se registra salida de pension')
 
-            state = self.printer_controller.print_pension_exit_ticket(
-                self.folio.get(),
-                Entrada.strftime(self.date_format_ticket),
-                Salida.strftime(self.date_format_ticket),
-                tiempo_total)
+            self.AbrirBarrera(Pines.PIN_BARRERA)
 
-            if state != None:
-                raise SystemError(state)
 
         except Exception as e:
             mb.showwarning("Error", e)
             return
         finally:
-            self.folio.set("")
-            self.entryfolio.focus()
+            self.NumeroTarjeta.set("")
+            self.entry_numrero_tarjeta.focus()
             self.ver_pensionados()
             self.PenAdentro()
 
@@ -1980,6 +2006,8 @@ class ViewCobro:
                     self.fecha_interna_entrada,
                     datetime.now().strftime(self.date_format_system),
                     motive_cancel)
+
+                self.AbrirBarrera(Pines.PIN_BARRERA)
 
                 self.cancel_window.destroy()
                 self.instance_tools.activar(self.root)
@@ -2858,8 +2886,6 @@ class ViewCobro:
             self.limpiar_datos_pago()
             return
 
-        numtarjeta = self.instance_tools.get_id_from_QR(numtarjeta)
-
         resultado = self.DB.ValidarRFID(numtarjeta)
 
         if not resultado:
@@ -2982,8 +3008,6 @@ class ViewCobro:
             # Verificar que se ha seleccionado una forma de pago
             if not self.variable_tipo_pago_transferencia.get() and not self.variable_tipo_pago_efectivo.get():
                 raise SystemError("Selecciona una forma de pago")
-
-            tarjeta = self.instance_tools.get_id_from_QR(tarjeta)
 
             Existe = self.DB.ValidarRFID(tarjeta)
 
@@ -3113,8 +3137,6 @@ class ViewCobro:
                 self.campo_texto_contraseña_pensionados.focus()
                 raise SystemError("Contraseña incorrecta")
 
-            tarjeta = self.instance_tools.get_id_from_QR(tarjeta)
-
             id_pension = self.DB.ValidarRFID(tarjeta)
 
             if not id_pension:
@@ -3158,7 +3180,7 @@ class ViewCobro:
         else:
             for fila in respuesta:
                 self.scroll_pensionados_dentro.insert(
-                    tk.END, f"{cont+1}) Pension-{self.nombre_estacionamiento.replace(' ', '_')}-{fila[0]}\n")
+                    tk.END, f"{cont+1}) {fila[0]}\n")
                 self.scroll_pensionados_dentro.insert(
                     tk.END, f"   {fila[1]} {fila[2]}\n")
                 self.scroll_pensionados_dentro.insert(
@@ -3292,7 +3314,6 @@ class ViewCobro:
         self.promo.set("")
         self.promo_auxiliar.set('')
         self.PonerFOLIO.set("")
-        self.label15.configure(text="")
         self.TarifaPreferente.set("")
         self.label_show_importe.config(text="")
         self.folio_auxiliar = None
@@ -3390,8 +3411,6 @@ class ViewCobro:
                 raise WithoutParameter(
                     "El número de tarjeta del pensionado a modificar")
 
-            numero_tarjeta = self.instance_tools.get_id_from_QR(numero_tarjeta)
-
             if len(contraseña) == 0:
                 self.campo_texto_contraseña_pensionados.focus()
                 raise WithoutParameter(
@@ -3440,89 +3459,6 @@ class ViewCobro:
         self.Estatus.set("")
         self.vaciar_tipo_pago()
         self.ver_pensionados()
-
-    def Pensionados(self, event):
-        try:
-            numero_tarjeta = self.instance_tools.get_id_from_QR(self.Placa.get())
-
-            print(numero_tarjeta)
-            Existe = self.DB.ValidarPen(numero_tarjeta)
-
-            if len(Existe) == 0:
-                raise SystemError("No existe Pensionado")
-
-            respuesta = self.DB.ConsultaPensionado_entrar(Existe)
-
-            for fila in respuesta:
-                VigAct = fila[0]
-                Estatus = fila[1]
-                Tolerancia = int(fila[3])
-                Placas = fila[4]
-                Nom_cliente = fila[5]
-                Apell1_cliente = fila[6]
-                Apell2_cliente = fila[7]
-
-            if VigAct is None:
-                raise SystemError("Tarjeton desactivado")
-
-            elif Estatus == 'Adentro':
-                raise SystemError("El Pensionado ya está dentro")
-
-            # Obtener la fecha y hora actual en formato deseado
-            VigAct = datetime.strptime(VigAct.strftime(
-                self.date_format_system), self.date_format_system)
-
-            # Obtener la fecha y hora actual en formato deseado
-            hoy = datetime.strptime(datetime.today().strftime(
-                self.date_format_system), self.date_format_system)
-
-            limite = self.instance_tools.get_date_limit(VigAct, Tolerancia)
-            print(limite)
-
-            if hoy >= limite:
-                raise SystemError("Vigencia Vencida")
-
-            Entrada = datetime.today()
-            datos = (Existe, numero_tarjeta, Entrada, 'Adentro', 0)
-            datos1 = ('Adentro', Existe)
-            self.DB.MovsPensionado(datos)
-            self.DB.UpdPensionado(datos1)
-
-            self.label_informacion.config(
-                text=f"Entro pensionado ID-{numero_tarjeta}")
-
-            self.ver_pensionados()
-            self.PenAdentro()
-
-            # Generar QR
-            path = self.instance_tools.generar_QR(self.Placa.get())
-            print(f"QR pension: {self.Placa.get()}")
-
-            state = self.printer_controller.print_pension_enter_ticket(
-                path,
-                self.Placa.get(),
-                f"{Nom_cliente} {Apell1_cliente} {Apell2_cliente}",
-                hoy.strftime(self.date_format_ticket),
-                Placas,
-                VigAct)
-
-            if state != None:
-                raise NotExist(state)
-
-
-        except TclError as e:
-            print(e)
-            self.label_informacion.config(text="El QR es Invalido")
-            return
-        except Exception as e:
-            if isinstance(e, NotExist):
-                mb.showwarning("Alerta", e)
-            else:
-                self.label_informacion.config(text=e)
-            return
-        finally:
-            self.Placa.set("")
-            self.entry_placa.focus()
 
     def tarjetas_expiradas(self) -> None:
         """
@@ -3674,6 +3610,16 @@ class ViewCobro:
             # Hacer focus en el widget deseado
             self.caja_texto_numero_tarjeta.focus()
 
+    def AbrirBarrera(self, PIN_BARRERA:Pines):
+        """Esta funcion se encarga de abrir la barrera."""
+
+        io.output(PIN_BARRERA.value, State.ON.value)
+        sleep(1)
+        io.output(PIN_BARRERA.value, State.OFF.value)
+
+        print('-----------------------------')
+        print("-------Se abre barrera-------")
+        print('-----------------------------')
 
 if __name__ == '__main__':
     ViewCobro()

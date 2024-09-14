@@ -2,22 +2,13 @@ from datetime import datetime, timedelta
 from escpos.printer import Usb
 import traceback
 import tkinter as tk
-from tkinter import messagebox as mb, ttk
-from Models.Model import Operacion
-from Tools.Tools import Tools
+from operacion import Operacion
 from time import sleep
-from Tools.Exceptions import WithoutParameter, SystemError, NotExist
 
 import RPi.GPIO as io           # Importa libreria de I/O (entradas / salidas)
-from Controllers.ConfigController import ConfigController
-from Controllers.PrinterController import PrinterController
-from .ViewLoginPanelConfig import View_Login
 
 from enum import Enum
-instance_config = ConfigController()
-printer_controller = PrinterController()
 
-data_config = instance_config.get_config("funcionamiento_interno", "pines")
 
 class Colors(Enum):
     """
@@ -70,14 +61,17 @@ class Pines(Enum):
 
     (En caso de modificar un PIN tambien modificar su comentario)
     """
-    PIN_BARRERA:int = data_config["Entrada"]["barrera"]# 13 # gpio13,pin33,Salida 
-    PIN_BOTON:int =data_config["Entrada"]["boton"]# 18 # gpio18,pin12,Salida 
-    PIN_SENSOR_AUTO:int = data_config["Entrada"]["sensor"]#4 # gpio4,pin7,Entrada 
+    PIN_BARRERA:int = 13 # gpio13,pin33,Salida 
+    PIN_BOTON:int = 18 # gpio18,pin12,Salida 
+    PIN_SENSOR_AUTO:int = 4 # gpio4,pin7,Entrada 
+    PIN_SENSOR_BOLETO:int = 23 # gpio23,pin16,Salida 
 
 
     PIN_INDICADOR_BARRERA:int = 26 # gpio26,pin37,Salida 
     PIN_INDICADOR_BOTON:int = 6 # gpio6,pin31,Salida
+
     PIN_INDICADOR_SENSOR_AUTO:int = 19 # gpio19,pin35,Salida
+    PIN_INDICADOR_SENSOR_BOLETO:int = 0
 
 class State(Enum):
     ON = 0
@@ -90,6 +84,7 @@ io.setwarnings(False)           # no señala advertencias de pin ya usados
 
 io.setup(Pines.PIN_SENSOR_AUTO.value,io.IN)             # configura en el micro las entradas
 io.setup(Pines.PIN_BOTON.value,io.IN)             # configura en el micro las entradas
+io.setup(Pines.PIN_SENSOR_BOLETO.value,io.IN)             # configura en el micro las entradas
 
 
 io.setup(Pines.PIN_BARRERA.value,io.OUT)           # configura en el micro las salidas
@@ -111,7 +106,7 @@ BanImpresion = State.ON.value #No ha impreso
 logo_1 = "LOGO1.jpg"
 AutoA = "AutoA.png"
 qr_imagen = "reducida.png"
- 
+
 nombre_estacionamiento = 'Hidalgo 401'
 nombre_entrada = "Punto Santa Rosa"
 
@@ -122,7 +117,7 @@ font_reloj = ('Arial', 65)
 
 font_etiquetas = ('Arial', 30, 'bold')
 
-fullscreen = False
+fullscreen = True
 
 
 class Entrada:
@@ -134,8 +129,6 @@ class Entrada:
         """
         # Objeto para interactuar con la base de datos
         self.DB=Operacion()
-
-        self.instance_tools = Tools()
 
         # Objeto para crear la ventana principal
         self.root=tk.Tk()
@@ -151,6 +144,10 @@ class Entrada:
             # Configura la ventana para que ocupe toda la pantalla
             # self.root.geometry(f"{screen_width}x{screen_height}+0+0")
 
+            self.root.attributes('-fullscreen', True)  
+            self.fullScreenState = False
+            self.root.bind("<F11>", self.enter_fullscreen)
+            self.root.bind("<Escape>", self.exit_fullscreen)
 
         # Colocar el LabelFrame en las coordenadas calculadas
         self.principal = tk.LabelFrame(self.root)
@@ -164,8 +161,6 @@ class Entrada:
 
         # Variable para guardar la placa del vehículo
         self.Placa = tk.StringVar()
-        
-        self.get_data()
 
         # Método para mostrar la interface
         self.Interface()
@@ -174,38 +169,7 @@ class Entrada:
         self.check_inputs() 
 
         # Iniciar el bucle principal de la ventana
-        self.root.mainloop()
-        
-    def get_data(self):
-        data_config = instance_config.get_config("general")
-        self.button_color = data_config["configuracion_sistema"]["color_botones_interface"]
-        self.button_letters_color = data_config["configuracion_sistema"]["color_letra_botones_interface"]
-        self.fuente_sistema = data_config["configuracion_sistema"]["fuente"]
-        size_text_font = data_config["configuracion_sistema"]["size_text_font"] + 10
-
-        self.size_text_font_tittle_system = data_config[
-            "configuracion_sistema"]["size_text_font_tittle_system"] + 10
-        self.size_text_font_subtittle_system = data_config[
-            "configuracion_sistema"]["size_text_font_subtittle_system"] + 10
-        self.size_text_button_font = data_config["configuracion_sistema"]["size_text_button_font"] + 10
-
-        self.font_subtittle_system = (
-            self.fuente_sistema, self.size_text_font_subtittle_system, 'bold')
-        self.font_tittle_system = (
-            self.fuente_sistema, self.size_text_font_tittle_system, 'bold')
-        self.font_botones_interface = (
-            self.fuente_sistema, self.size_text_button_font, 'bold')
-        self.font = self.font_subtittle_system
-
-        size = (size_text_font+30, size_text_font+10)
-        self.hide_password_icon = self.instance_tools.get_icon(
-            data_config["imagenes"]["hide_password_icon"], size)
-        self.show_password_icon = self.instance_tools.get_icon(
-            data_config["imagenes"]["show_password_icon"], size)
-        size = size_text_font+15
-        self.config_icon = self.instance_tools.get_icon(
-            data_config["imagenes"]["config_icon"], (size, size))
-        data_config = None
+        self.root.mainloop() 
 
     def Interface(self):
         """
@@ -225,19 +189,9 @@ class Entrada:
         frame_mensaje_bienvenida.grid_rowconfigure(0, weight=1)
         frame_mensaje_bienvenida.grid_columnconfigure(0, weight=1)
 
-        frame_form = tk.Frame(
-            frame_mensaje_bienvenida)
-        frame_form.grid(
-            column=0, row=0, padx=5, pady=5)
-
-        # Botones de salir y entrar
-        boton_config = ttk.Button(
-            frame_form, image=self.config_icon, command=self.view_config_panel)
-        boton_config.grid(column=0, row=0, padx=5, pady=5)
-
         # Label para mostrar el mensaje de bienvenida
         label_entrada = tk.Label(frame_mensaje_bienvenida, text=f"Bienvenido(a)", font=font_mensaje, justify='center')
-        label_entrada.grid(row=0, column=1)
+        label_entrada.grid(row=0, column=0)
 
 
         frame_info = tk.LabelFrame(seccion_entrada)
@@ -283,10 +237,31 @@ class Entrada:
         # Dar el foco al entry de la tarjeta
         self.entry_numero_tarjeta.focus()
 
-    def view_config_panel(self):
-        self.instance_tools.desactivar(self.root)
-        View_Login(False)
-        self.instance_tools.activar(self.root)
+    def interrupcion_SENSOR_BOLETO(self):
+        """Detecta presencia de boleto"""
+        global BanSenBoleto
+        # Si el sensor de boleto detecta un boleto
+        if io.input(Pines.PIN_SENSOR_BOLETO.value):
+
+            # Apagar el indicador de barrera
+            io.output(Pines.PIN_INDICADOR_BARRERA.value, State.OFF.value)#con un "1" se apaga el led
+
+            # Cambiar el estado del sensor de boleto a apagado
+            BanSenBoleto = State.OFF.value
+
+            # Imprimir en la consola que no siente boleto
+            print('no siente boleto')
+
+        # Si el sensor de boleto no detecta un boleto
+        else:                
+            # Encender el indicador de barrera
+            io.output(Pines.PIN_INDICADOR_BARRERA.value ,State.ON.value)     
+                         
+            # Cambiar el estado del sensor de boleto a encendido
+            BanSenBoleto = State.ON.value
+
+            # Imprimir en la consola que siente boleto
+            print('siente boleto')
 
     def interrupcion_SENSOR_AUTO(self):
         """Detecta presencia de automovil"""
@@ -343,6 +318,7 @@ class Entrada:
     # Agregar eventos para detectar los cambios en los sensores y botones
     io.add_event_detect(Pines.PIN_SENSOR_AUTO.value, io.BOTH, callback = interrupcion_SENSOR_AUTO)
     io.add_event_detect(Pines.PIN_BOTON.value, io.BOTH, callback = interrupcion_DETECCION_BOLETO)
+    io.add_event_detect(Pines.PIN_SENSOR_BOLETO.value, io.BOTH, callback = interrupcion_SENSOR_BOLETO)
 
     def check_inputs(self):
         """
@@ -450,33 +426,89 @@ class Entrada:
 
 
     def generar_boleto(self):
-        try:
-            # Obtener la placa del vehiculo desde la variable Placa
-            # placa = self.Placa.get()
+        """
+        Genera un boleto de entrada.
 
-            # Validar si se requiere una placa y si no se ingreso ninguna
-            # if not placa and self.requiere_placa:
-            #     raise WithoutParameter("Placa del auto")
+        :return: None
+        """
+        # Obtener la placa del vehículo
+        placa = self.Placa.get()
+        
+        # Inicializar el corte a 0
+        Corte = 0
 
-            folio_boleto = self.DB.MaxfolioEntrada() + 1
-            self.MaxId.set(folio_boleto)
+        # Obtener el máximo folio de la base de datos
+        MaxFolio=self.DB.MaxfolioEntrada()
+        
+        # Incrementar el folio en 1
+        folio_boleto = MaxFolio + 1
+        
+        # Asignar el folio al atributo MaxId
+        self.MaxId.set(folio_boleto)
 
-            state = printer_controller.print_ticket(folio_boleto, "placa")
+        # Cifrar el folio con el método de la base de datos
+        folio_cifrado = self.DB.cifrar_folio(folio = folio_boleto)
+        # print(f"QR entrada: {folio_cifrado}")
 
-            if state != None:
-                mb.showwarning("Alerta", state)
-                state = ""
-                return
+        # Generar el código QR con el método de la base de datos
+        self.DB.generar_QR(folio_cifrado)
 
-            state=f"Se genera boleto"
+        # Obtener la fecha y hora de entrada en formato deseado
+        fechaEntro = datetime.today().strftime("%Y-%m-%d %H:%M:%S")
+        
+        # Crear una tupla con los datos de la entrada
+        datos=(fechaEntro, Corte, placa)
 
-        except Exception as e:
-            state=e
+        # Crear un objeto de impresora USB con los parámetros dados
+        printer = Usb(0x04b8, 0x0e15, 0)
 
-        finally:
-            self.label_informacion.config(text=state)
-            self.entry_numero_tarjeta.focus()
-            self.Placa.set("")
+        # Imprimir la imagen del logo (comentado)
+        printer.image(logo_1)
+        
+        # Imprimir una línea de separación
+        printer.text("--------------------------------------\n")
+        
+        # Centrar el texto y cambiar el tamaño
+        printer.set("center")
+        
+        # Imprimir el título del boleto
+        printer.text("BOLETO DE ENTRADA\n")
+        
+        # Centrar el texto y cambiar el tamaño y la altura
+        printer.set(height=2, align='center')
+        
+        # Imprimir el folio del boleto con el formato deseado
+        printer.text(f'Folio 000{folio_boleto}\n')
+
+        # Centrar el texto
+        printer.set("center")        
+        
+        # Imprimir la fecha y hora de entrada sin los segundos
+        printer.text(f'Entro: {fechaEntro[:-3]}\n')
+        
+        # Imprimir el nombre del estacionamiento
+        printer.text(f'{nombre_estacionamiento}\n')
+        
+        # Imprimir el nombre de la entrada
+        printer.text(f'Entrada {nombre_entrada}\n')
+        
+        # Alinear el texto a la izquierda
+        printer.set(align = "left")
+        
+        # Imprimir la imagen del código QR
+        printer.image(qr_imagen)
+
+        # Imprimir una línea de separación
+        printer.text("--------------------------------------\n")
+        
+        # Cortar el papel
+        printer.cut()
+
+        # Cerrar la conexión con la impresora
+        printer.close()
+
+        # Agregar el registro RFID a la base de datos con el método correspondiente
+        self.DB.altaRegistroRFID(datos)
 
 
     def Pensionados(self, event):
@@ -658,6 +690,35 @@ class Entrada:
         """
         # Configurar el label con el nuevo texto y el nuevo color
         label.config(text=new_text.value, background=new_color.value)
+
+    def enter_fullscreen(self, event):
+        """
+        Cambia el modo de pantalla completa de la ventana.
+
+        :param event: Evento de teclado.
+        :return: None
+        """
+        # Cambiar el estado de pantalla completa al opuesto
+        self.fullScreenState = not self.fullScreenState
+        # Configurar el atributo de pantalla completa de la ventana
+        self.root.attributes("-fullscreen", self.fullScreenState)
+        # Dar el foco al entry de la tarjeta
+        self.entry_numero_tarjeta.focus() 
+
+    def exit_fullscreen(self, event):
+        """
+        Sale del modo de pantalla completa de la ventana.
+
+        :param event: Evento de teclado.
+        :return: None
+        """
+        # Dar el foco al entry de la tarjeta
+        self.entry_numero_tarjeta.focus()
+        # Cambiar el estado de pantalla completa a falso
+        self.fullScreenState = False
+        # Configurar el atributo de pantalla completa de la ventana
+        self.root.attributes("-fullscreen", self.fullScreenState)
+
 
 
 if __name__ == '__main__':

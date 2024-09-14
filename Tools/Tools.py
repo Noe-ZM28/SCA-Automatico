@@ -48,7 +48,6 @@ class Tools:
         - desconectar: Cierra la ventana principal y detiene el hilo en el que se ejecuta.
         - desactivar: Desactiva la interfaz.
         - activar: Activa la interfaz.
-        - get_id_from_QR: Obtiene el número de tarjeta del pensionado a partir del texto QR.
         - obtener_datos_servidor: Realiza una consulta al servidor y devuelve los datos obtenidos.
     """
 
@@ -189,7 +188,7 @@ class Tools:
             ImageTk.PhotoImage: Objeto PhotoImage que representa el icono.
         """
         icon = Image.open(image)
-        icon = icon.resize(size, Image.ANTIALIAS)
+        icon = icon.resize(size, Image.LANCZOS)
         return ImageTk.PhotoImage(icon)
 
     def cifrar_folio(self, folio: int) -> str:
@@ -469,28 +468,6 @@ class Tools:
             main_window (Toplevel): Ventana.
         """
         main_window.deiconify()
-
-    def get_id_from_QR(self, qr_text: str) -> str:
-        """
-        Obtiene el número de tarjeta del pensionado a partir del texto QR.
-
-        Args:
-            qr_text (str): El texto QR que contiene la informacion necesaria.
-
-        Returns:
-            str: El número de tarjeta del pensionado.
-
-        Example:
-        >>> qr_text = "Pension-NombreEstacionamiento-12345"
-        >>> id_numero = estacionamiento.get_id_from_QR(qr_text)
-        >>> print(id_numero)
-        "12345"
-        """
-        # La posicion del identificador es determinada por la longitud de la cadena f"Pension-{self.nombre_estacionamiento}-"
-        position_id = len(f"Pension-{self.nombre_estacionamiento}-")
-
-        # Retorna el número de tarjeta del pensionado
-        return qr_text[position_id:]
 
     def visible_password(self, button: ttk.Button, entry_password: Entry, visible: BooleanVar, show_password_icon, hide_password_icon) -> None:
         """
@@ -920,6 +897,19 @@ class Tools:
             return None
 
 
+    def is_valid_pin(self, pin):#, mode=None):
+        # Listas de pines válidos para el esquema de numeración BCM y BOARD
+        valid_pins_bcm =   [2, 3, 4, 17, 27, 22, 10, 9, 11, 5, 6, 13, 19, 26, 14, 15, 18, 23, 24, 25, 8, 7, 12, 16, 20, 21]
+        valid_pins_board = [3, 5, 7, 11, 13, 15, 19, 21, 23, 8, 10, 24, 26, 29, 31, 33, 35, 37, 32, 36, 38, 40, 12, 16, 18, 22]
+
+        return pin in valid_pins_bcm
+        
+        # if mode == GPIO.BCM:
+        #     return pin in valid_pins_bcm
+        # elif mode == GPIO.BOARD:
+        #     return pin in valid_pins_board
+        # else:
+        #     return False
 
 class BlinkingLabel:
     """

@@ -17,15 +17,15 @@ def main():
 
         elif system_to_load == 1:
             # Importar la clase del sistema de entrada
-            from Views.ViewEntrada import ViewEntrada as System
+            from Views.test_pantalla_entrada import Entrada as System
 
         elif system_to_load == 2:
             # Importar la clase del sistema de salida
-            from Views.ViewSalida import ViewSalida as System
+            from Views.test_pantalla_salida import Salida as System
 
         else:
             # Importar la clase del sistema de seleccion
-            from Views.ViewLoginPanelConfig import View_Login as System
+            from Views.test_pantalla_salida import Salida as System
 
         # Iniciar el sistema
         System()

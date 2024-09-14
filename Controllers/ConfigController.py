@@ -290,7 +290,7 @@ class ConfigController:
         # Solicitar al usuario que seleccione la ruta para guardar la copia de seguridad
         path_file = filedialog.asksaveasfilename(
             title="Seleccionar ruta para guardar archivo de configuracion",
-            initialfile=f'ConfigFile_{parking_name}_{system_to_load}_{datetime.now().strftime("%Y-%m-%d")}.'.replace(" ", "_"),
+            initialfile=f'ConfigFile_{parking_name}_{system_to_load}_{datetime.now().strftime("%Y-%m-%d")}.json'.replace(" ", "_"),
             defaultextension="json",
             filetypes=[("Todos los archivos", "*.*")]
         )
