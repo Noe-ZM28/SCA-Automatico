@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 from escpos.printer import Usb
 import traceback
 import tkinter as tk
-from tkinter import messagebox as mb
+from tkinter import messagebox as mb, ttk
 from Models.Model import Operacion
 from Tools.Tools import Tools
 from time import sleep
@@ -11,6 +11,7 @@ from Tools.Exceptions import WithoutParameter, SystemError, NotExist
 import RPi.GPIO as io           # Importa libreria de I/O (entradas / salidas)
 from Controllers.ConfigController import ConfigController
 from Controllers.PrinterController import PrinterController
+from .ViewLoginPanelConfig import View_Login
 
 from enum import Enum
 instance_config = ConfigController()
@@ -163,6 +164,8 @@ class Entrada:
 
         # Variable para guardar la placa del vehículo
         self.Placa = tk.StringVar()
+        
+        self.get_data()
 
         # Método para mostrar la interface
         self.Interface()
@@ -171,7 +174,38 @@ class Entrada:
         self.check_inputs() 
 
         # Iniciar el bucle principal de la ventana
-        self.root.mainloop() 
+        self.root.mainloop()
+        
+    def get_data(self):
+        data_config = instance_config.get_config("general")
+        self.button_color = data_config["configuracion_sistema"]["color_botones_interface"]
+        self.button_letters_color = data_config["configuracion_sistema"]["color_letra_botones_interface"]
+        self.fuente_sistema = data_config["configuracion_sistema"]["fuente"]
+        size_text_font = data_config["configuracion_sistema"]["size_text_font"] + 10
+
+        self.size_text_font_tittle_system = data_config[
+            "configuracion_sistema"]["size_text_font_tittle_system"] + 10
+        self.size_text_font_subtittle_system = data_config[
+            "configuracion_sistema"]["size_text_font_subtittle_system"] + 10
+        self.size_text_button_font = data_config["configuracion_sistema"]["size_text_button_font"] + 10
+
+        self.font_subtittle_system = (
+            self.fuente_sistema, self.size_text_font_subtittle_system, 'bold')
+        self.font_tittle_system = (
+            self.fuente_sistema, self.size_text_font_tittle_system, 'bold')
+        self.font_botones_interface = (
+            self.fuente_sistema, self.size_text_button_font, 'bold')
+        self.font = self.font_subtittle_system
+
+        size = (size_text_font+30, size_text_font+10)
+        self.hide_password_icon = self.instance_tools.get_icon(
+            data_config["imagenes"]["hide_password_icon"], size)
+        self.show_password_icon = self.instance_tools.get_icon(
+            data_config["imagenes"]["show_password_icon"], size)
+        size = size_text_font+15
+        self.config_icon = self.instance_tools.get_icon(
+            data_config["imagenes"]["config_icon"], (size, size))
+        data_config = None
 
     def Interface(self):
         """
@@ -191,9 +225,19 @@ class Entrada:
         frame_mensaje_bienvenida.grid_rowconfigure(0, weight=1)
         frame_mensaje_bienvenida.grid_columnconfigure(0, weight=1)
 
+        frame_form = tk.Frame(
+            frame_mensaje_bienvenida)
+        frame_form.grid(
+            column=0, row=0, padx=5, pady=5)
+
+        # Botones de salir y entrar
+        boton_config = ttk.Button(
+            frame_form, image=self.config_icon, command=self.view_config_panel)
+        boton_config.grid(column=0, row=0, padx=5, pady=5)
+
         # Label para mostrar el mensaje de bienvenida
         label_entrada = tk.Label(frame_mensaje_bienvenida, text=f"Bienvenido(a)", font=font_mensaje, justify='center')
-        label_entrada.grid(row=0, column=0)
+        label_entrada.grid(row=0, column=1)
 
 
         frame_info = tk.LabelFrame(seccion_entrada)
@@ -238,6 +282,11 @@ class Entrada:
 
         # Dar el foco al entry de la tarjeta
         self.entry_numero_tarjeta.focus()
+
+    def view_config_panel(self):
+        self.instance_tools.desactivar(self.root)
+        View_Login(False)
+        self.instance_tools.activar(self.root)
 
     def interrupcion_SENSOR_AUTO(self):
         """Detecta presencia de automovil"""

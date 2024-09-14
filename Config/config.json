@@ -7,10 +7,10 @@
     "system_to_load": 0,
     "general": {
         "informacion_estacionamiento": {
-            "nombre_estacionamiento": "Test 123",
-            "email": "",
-            "password": "",
-            "iv": "",
+            "nombre_estacionamiento": "Monterrey 75",
+            "email": "monterrey75@pasesa.com.mx",
+            "password": "kxxjHX0iSXkeNOACU6rJBA==",
+            "iv": "3cf8c81387dc564ba0ff11f547729ec4",
             "cantidad_cajones": 200,
             "nombre_entrada": "TPV"
         },
@@ -30,7 +30,7 @@
         "configuracion_sistema": {
             "impresora": {
                 "idVendor": "04b8",
-                "idProduct": "0e15"
+                "idProduct": "0202"
             },
             "formatos_fecha": [
                 "%Y-%m-%d %H:%M:%S",
@@ -96,9 +96,9 @@
             "size_text_button_font": 11,
             "size_text_font_subtittle_system": 12,
             "size_text_font_tittle_system": 12,
-            "formato_hora_interface": 0,
-            "formato_hora_boleto": 0,
-            "formato_hora_reloj_expedidor_boleto": 14,
+            "formato_hora_interface": 1,
+            "formato_hora_boleto": 1,
+            "formato_hora_reloj_expedidor_boleto": 1,
             "fuente": "Arial",
             "color_botones_interface": "#062546",
             "color_letra_botones_interface": "#ffffff",
@@ -112,7 +112,7 @@
             "imprime_contra_parabrisas": false,
             "imprime_contra_localizacion": false,
             "solicita_datos_del_auto": false,
-            "habilita_impresion_boleto_perdido": false,
+            "habilita_impresion_boleto_perdido": true,
             "size_font_boleto": 1,
             "size_font_contra_parabrisas": 2,
             "size_font_contra_localizacion": 1
@@ -120,14 +120,18 @@
         "configuracion_pensionados": {
             "password": "LwbDZRgOoFZ+NRBoHo6H3g==",
             "iv": "5470c7b9ee19098c7839029b2ff31e83",
-            "costo_tarjeta": 0,
-            "costo_reposicion_tarjeta": 0,
+            "costo_tarjeta": 116,
+            "costo_reposicion_tarjeta": 232,
             "penalizacion_diaria": 0
         },
         "configuiracion_envio": {
-            "destinatario_DB": "",
-            "destinatario_corte": [],
-            "destinatario_notificaciones": []
+            "destinatario_DB": "reportes.panel@pasesa.com.mx",
+            "destinatario_corte": [
+                "ingresos@pasesa.com.mx"
+            ],
+            "destinatario_notificaciones": [
+                "ingresos@pasesa.com.mx"
+            ]
         },
         "configuiracion_reloj": {
             "color_primera_hora": "#062546",
@@ -139,14 +143,14 @@
         }
     },
     "tarifa": {
-        "tarifa_boleto_perdido": 250,
-        "tipo_tarifa_sistema": false,
+        "tarifa_boleto_perdido": 290,
+        "tipo_tarifa_sistema": true,
         "tarifa_simple": {
             "inicio_cobro_fraccion": 2,
-            "tarifa_1_fraccion": 5,
-            "tarifa_2_fraccion": 10,
-            "tarifa_3_fraccion": 15,
-            "tarifa_hora": 20
+            "tarifa_1_fraccion": 8,
+            "tarifa_2_fraccion": 16,
+            "tarifa_3_fraccion": 24,
+            "tarifa_hora": 32
         },
         "tarifa_personalizada": {
             "0": {
@@ -301,7 +305,175 @@
             }
         }
     },
-    "promociones": {},
+    "promociones": {
+        "OF OFFIC": {
+            "tipo_lectura": "qr",
+            "real_name": "s/co",
+            "estatus": true,
+            "tipo_tarifa": true,
+            "inicio_cobro_fraccion": 1,
+            "tarifa_1_fraccion": 0,
+            "tarifa_2_fraccion": 0,
+            "tarifa_3_fraccion": 0,
+            "tarifa_hora": 0
+        },
+        "OM OFFIC": {
+            "tipo_lectura": "qr",
+            "real_name": "OMax",
+            "estatus": true,
+            "tipo_tarifa": false,
+            "0": {
+                "hora": 8,
+                "1": 8,
+                "2": 8,
+                "3": 8
+            },
+            "1": {
+                "hora": 8,
+                "1": 16,
+                "2": 24,
+                "3": 32
+            },
+            "2": {
+                "hora": 40,
+                "1": 48,
+                "2": 56,
+                "3": 64
+            },
+            "3": {
+                "hora": 72,
+                "1": 80,
+                "2": 88,
+                "3": 96
+            },
+            "4": {
+                "hora": 104,
+                "1": 112,
+                "2": 120,
+                "3": 128
+            },
+            "5": {
+                "hora": 136,
+                "1": 144,
+                "2": 152,
+                "3": 160
+            },
+            "6": {
+                "hora": 168,
+                "1": 176,
+                "2": 184,
+                "3": 192
+            },
+            "7": {
+                "hora": 200,
+                "1": 208,
+                "2": 216,
+                "3": 224
+            },
+            "8": {
+                "hora": 232,
+                "1": 240,
+                "2": 248,
+                "3": 256
+            },
+            "9": {
+                "hora": 264,
+                "1": 272,
+                "2": 280,
+                "3": 288
+            },
+            "10": {
+                "hora": 296,
+                "1": 304,
+                "2": 312,
+                "3": 320
+            },
+            "11": {
+                "hora": 328,
+                "1": 336,
+                "2": 344,
+                "3": 352
+            },
+            "12": {
+                "hora": 360,
+                "1": 368,
+                "2": 376,
+                "3": 384
+            },
+            "13": {
+                "hora": 392,
+                "1": 400,
+                "2": 408,
+                "3": 416
+            },
+            "14": {
+                "hora": 424,
+                "1": 432,
+                "2": 440,
+                "3": 448
+            },
+            "15": {
+                "hora": 456,
+                "1": 464,
+                "2": 472,
+                "3": 480
+            },
+            "16": {
+                "hora": 488,
+                "1": 496,
+                "2": 504,
+                "3": 512
+            },
+            "17": {
+                "hora": 520,
+                "1": 528,
+                "2": 536,
+                "3": 544
+            },
+            "18": {
+                "hora": 552,
+                "1": 560,
+                "2": 568,
+                "3": 576
+            },
+            "19": {
+                "hora": 584,
+                "1": 592,
+                "2": 600,
+                "3": 608
+            },
+            "20": {
+                "hora": 616,
+                "1": 624,
+                "2": 632,
+                "3": 640
+            },
+            "21": {
+                "hora": 648,
+                "1": 656,
+                "2": 664,
+                "3": 672
+            },
+            "22": {
+                "hora": 680,
+                "1": 688,
+                "2": 696,
+                "3": 704
+            },
+            "23": {
+                "hora": 712,
+                "1": 720,
+                "2": 728,
+                "3": 736
+            },
+            "24": {
+                "hora": 744,
+                "1": 752,
+                "2": 760,
+                "3": 768
+            }
+        }
+    },
     "funcionamiento_interno": {
         "panel_configuracion": {
             "usuario": "admin",
@@ -318,17 +490,17 @@
             "password": "SZJcMWiwc9nd9uSO/Rc8Ww==",
             "iv": "6f3c008a5d37219a2c0770cab61445fe",
             "host": "localhost",
-            "db": "db_pino_suarez_27"
+            "db": "db_monterrey_75"
         },
         "pines": {
             "TPV": {
                 "has_barrera": true,
-                "barrera": 13
+                "barrera": 17
             },
             "Entrada": {
-                "boton": 21,
-                "sensor": 11,
-                "barrera": 5
+                "boton": 20,
+                "sensor": 21,
+                "barrera": 17
             },
             "Salida": {
                 "barrera": 9

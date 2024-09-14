@@ -2,4 +2,4 @@
 
 cd /path/to/main/
 
-sudo python3 main.py
+sudo python3 -E main.py

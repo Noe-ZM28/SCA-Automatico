@@ -54,10 +54,10 @@ io.setmode(io.BCM)              # modo in/out pin del micro
 io.setwarnings(False)           # no señala advertencias de pin ya usados
 
 io.setup(Pines.PIN_BARRERA.value,io.OUT)
-io.setup(Pines.PIN_INDICADOR_BARRERA.value,io.OUT)  
+# io.setup(Pines.PIN_INDICADOR_BARRERA.value,io.OUT)  
 
 io.output(Pines.PIN_BARRERA.value, State.OFF.value)
-io.output(Pines.PIN_INDICADOR_BARRERA.value, State.OFF.value)
+# io.output(Pines.PIN_INDICADOR_BARRERA.value, State.OFF.value)
 
 
 class ViewCobro:
