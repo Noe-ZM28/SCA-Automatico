@@ -364,7 +364,7 @@ class Tools:
         # Devolver el valor
         return nueva_vigencia
 
-    def calcular_penalizacion_diaria(self, penalizacion_diaria: int, fecha_limite) -> tuple[int, int]:
+    def calcular_penalizacion_diaria(self, penalizacion_diaria: int, fecha_limite):
         """
         Calcula la penalizacion diaria basada en la diferencia de dias entre la fecha limite y la fecha actual.
 
@@ -816,7 +816,7 @@ class Tools:
             print("Error al crear el respaldo.")
             return None
 
-    def cifrar_AES(self, texto_plano: str) -> tuple[str, bytes]:
+    def cifrar_AES(self, texto_plano: str):
         """
         Cifra el texto plano utilizando el algoritmo AES en modo CBC.
 

@@ -275,7 +275,7 @@ class Pensionados(Usuarios):
         # Se ejecuta la consulta
         self.execute_query(query)
         
-    def get_list_paids_pensiones(self, year_param: int, month_param: int, id_pension:int) -> tuple[list, list, list]:
+    def get_list_paids_pensiones(self, year_param: int, month_param: int, id_pension:int):
         """
         Realiza una consulta SQL en la base de datos y devuelve registros junto con otros valores.
 
@@ -441,7 +441,7 @@ class Cambios(Usuarios):
         self.execute_query(query)
 
 
-    def get_list_changes(self, year_param: int, month_param: int) -> tuple[list, list, list]:
+    def get_list_changes(self, year_param: int, month_param: int):
         """
         Realiza una consulta SQL en la base de datos y devuelve registros junto con otros valores.
 

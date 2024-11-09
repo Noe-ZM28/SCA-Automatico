@@ -68,7 +68,7 @@ class CobroController:
 
         return importe
 
-    def get_importe_promo(self, promo_id:str, minutos_dentro:int, horas_dentro:int, dias_dentro:int) -> tuple[int, str]:
+    def get_importe_promo(self, promo_id:str, minutos_dentro:int, horas_dentro:int, dias_dentro:int):
         importe = 0
         data_config = self.instance_config.get_config("promociones", promo_id)
         tipo_tarifa = data_config["tipo_tarifa"]
