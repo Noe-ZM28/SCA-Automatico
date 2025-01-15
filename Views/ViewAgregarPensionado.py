@@ -57,7 +57,6 @@ class View_agregar_pensionados:
 
         # Crea las variables para los datos del pensionado
         self.variable_numero_tarjeta = StringVar()
-        self.variable_numero_tarjeta.set(self.query.get_QR_id())
 
         self.variable_nombre = StringVar()
         self.variable_apellido_1 = StringVar()
@@ -132,7 +131,7 @@ class View_agregar_pensionados:
         etiqueta_numero_tarjeta.grid(
             row=0, column=0, padx=5, pady=5, sticky=tk.NW)
         self.campo_numero_tarjeta = tk.Entry(
-            seccion_datos_personales_pensionado, font=self.font, textvariable=self.variable_numero_tarjeta, state='disabled')
+            seccion_datos_personales_pensionado, font=self.font, textvariable=self.variable_numero_tarjeta)
         self.campo_numero_tarjeta.grid(row=0, column=1, padx=5, pady=5)
 
         etiqueta_nombre_pensionado = tk.Label(
@@ -333,6 +332,10 @@ class View_agregar_pensionados:
 
             datos_pensionado = (variable_numero_tarjeta, variable_nombre, variable_apellido_1, variable_apellido_2, variable_fecha_alta, variable_telefono_1, variable_telefono_2, variable_ciudad,
                                 variable_colonia, variable_cp, variable_numero_calle, variable_placas, variable_auto_modelo, variable_auto_color, variable_monto, variable_cortesia, variable_tolerancia, variable_estatus)
+
+            if len(str(variable_numero_tarjeta)) > 11:
+                raise SystemError(
+                    "Numero de tarjeta demasiado largo, contacta con un administrador")
 
             resultado = self.query.consultar_pensionado(
                 variable_numero_tarjeta)
