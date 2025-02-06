@@ -321,6 +321,20 @@
             "iv": "5470c7b9ee19098c7839029b2ff31e83",
             "host": "localhost",
             "db": "db_test"
+        },
+        "pines": {
+            "TPV": {
+                "has_barrera": true,
+                "barrera": 17
+            },
+            "Entrada": {
+                "boton": 20,
+                "sensor": 21,
+                "barrera": 17
+            },
+            "Salida": {
+                "barrera": 9
+            }
         }
     }
 }
