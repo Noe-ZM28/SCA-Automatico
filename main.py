@@ -12,7 +12,6 @@ def main():
 
         if system_to_load == 0:
             # Importar la clase del sistema de cobro
-            #from Views.ViewCobro import ViewCobro as System
             from Views.ViewLoginSystem import LoginSystem as System
 
         elif system_to_load == 1:
