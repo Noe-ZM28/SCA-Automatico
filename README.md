@@ -73,6 +73,8 @@ exit;
 
 <p>Recuerda cambiar 'nombre_usuario' y 'contraseña' según tus preferencias de seguridad y configurar las credenciales correctamente para el funcionamiento del sistema.</p>
 
+- **Recuerde guardar en un lugar seguro las credenciales, pues estas deberán ser configuradas dentro del panel de configuración del sistema**.
+
 <h3 id="4-carga-de-estructura-base-de-la-base-de-datos">4. Carga de Estructura Base de la Base de Datos</h3>
 
 <p>Para cargar la estructura base de la base de datos <code>DB\db_base.sql</code>, utiliza el siguiente comando:</p>
@@ -88,41 +90,81 @@ exit;
 <p>Para aprovechar las capacidades de depuración, se proporciona una configuración predefinida en el archivo <code>.vscode/launch.json</code>. Asegúrate de tener la extensión "Python" instalada en VS Code y utiliza esta configuración para facilitar el proceso de desarrollo y depuración del sistema.</p>
 
 
-# Lineamientos para la Adición de Nuevas Funcionalidades  
+## 1. Configuración Inicial
 
-## 1. Configuración Inicial  
-- Añadir datos de configuración en el archivo de configuración por defecto.  
+En esta sección, se explica cómo añadir datos de configuración en un archivo de configuración por defecto en formato `.json`. Este archivo se utiliza para almacenar ajustes personalizados del sistema.
 
-## 2. Obtener Datos de Configuración  
-- Añadir líneas de código en la función `get_config_data` para obtener cada dato añadido en el archivo de configuración.  
-- Asegurarse de que los datos obtenidos sean acordes al tipo de uso del sistema.  
+---
 
-## 3. Asignación de Variables en `View_Panel_Config`  
-- Guardar los datos obtenidos en el paso anterior en variables dentro de la clase `View_Panel_Config`.  
+### Paso 1: Agregar nueva configuración al archivo de configuración
+
+1. Dentro del archivo llamado `Config\default_config.json` define la estructura de la nueva configuración a añadir, considera que las configuraciones se agrupan por 
+
+- general: almacena configuaciones correspondientes a imagenes del sitema, asi como formatos de fecha, tipos de fuentes y todo lo relacionado a la información de la interface
+- tarifa: Guarda la información correspondiente a la tarifa del sistema, esta configuración no debe de ser modificada desde el archivo de configuración, si no desde dentro de la interface.
+- promociones: almacena las promociones que son añadidas al sistema, asi como su configuración y como son aplciadas estas.
+- funcionamiento_interno: guarda las credenciales utilizadas dentro del sistema asi como configuracines de pines.
+
+Por ejemplo:
+
+   ```json
+  {
+    "general": {
+      "configuracion_sistema": {
+        "impresora": {
+          "idVendor": "04b8",
+          "idProduct": "0201"
+        },
+        "resolucion": "1920x1080"
+      },
+      "version": "1.0.0"
+    }
+  }
+   ```
+
+## 2. Obtener Configuración con `get_config`
+
+La función `get_config` se encuentra dentro de la clase `ConfigController` en el módulo `Controllers.ConfigController`. Esta función está diseñada para obtener valores de configuración del archivo JSON de manera segura y eficiente.
+
+---
+
+### Uso de la función `get_config`
+
+La función **no debe modificarse**, ya que está optimizada para leer el archivo de configuración y manejar errores comunes. Solo debe usarse para obtener valores de configuración.
+
+#### Ejemplo de uso de la función:
+Instancia la clase para acceder a la función get_config:
+```python
+from Controllers.ConfigController import ConfigController
+
+config_controller = ConfigController()
+
+valor_configuracion = config_controller.get_config("general", "configuracion_sistema", "version")
+
+print(valor_configuracion)  # Salida: "1.0.0"
+  ```
+
+## 3. Adición de vistas
+- En caso de requerir añadir nuevas vistas, es decir añadir ventanas al sistema, estas deben de ser añadidas dentro de la carpeta `Views\`, el nombre debe de iniciar con el prefijo `View`.
 - Declarar las variables acorde al tipo de dato que están almacenando.  
 
 ## 4. Detección y Registro de Cambios  
-- Implementar código en el método `save_data_interna` para detectar cambios y guardar información.  
-- Registrar los cambios realizados en el sistema.  
-
-## 5. Validaciones en `validate_data_interna`  
-- Añadir validaciones acorde al tipo de uso del sistema.  
-- Para números, asegurarse de qasignar el metodo `validate_entry_number`.  
-
-## 6. Limpieza de Datos  
-- Implementar código en `clean_data_form_interna` para limpiar las cajas de texto.  
-- La limpieza debe estar acorde al tipo de uso del sistema.  
+- Si se han añadido nuevas configuraciones, estas deben de ser registradas en el metodo de acuerdo al tipo de configuración, de igual manera tienen que añadirse validaciones para las nuevas configuraciones y por ultimo añadir las configuraciones en las funciones para limpiar los valores de la interface.
+- Se recomienda seguir los ejemplos de las configuraciones ya existentes  
 
 ## 7. Reinicio de Configuración  
-- Cerrar todo, eliminar la configuración del sistema y cargar la configuración desde cero.  
+- Cerrar todo, eliminar la configuración del sistema y cargar la configuración por defecto para cargas las nuevas configuraciones, no olvidar configurar corerctamente las credenciales de las bases de datos.  
 
 ## 8. Pruebas  
-- En caso de añadir nuevas funcionalidades, utilizar el archivo `test.py` para asegurar el correcto funcionamiento del sistema.  
+- En caso de añadir nuevas funcionalidades, utilizar el archivo `test.py` para asegurar el correcto funcionamiento del sistema, posteriormente integrar cambios en el sistema dividiendo la logica del mismo.
 
 ## 9. Control de Versiones  
 - **No hacer cambios directamente en la rama `main`**.  
-- Utilizar únicamente la rama de desarrollo.  
-- Solo después de la validación de los cambios, fusionar con `master`.  
+- Utilizar únicamente la rama de desarrollo `dev`.
+- Solo después de la validación de los cambios fusionar con `master`.  
 
 ## 10. Manejo de ramas
-- **Siempre mantener actualizada la rama `main` con los ultimos cambios hechos en la rama de desarrollo**.  
+- **Siempre mantener actualizada la rama `main` con los ultimos cambios hechos en la rama de desarrollo**.
+
+## 11. Consideraciones
+- **Siempre mantener actualizada la rama `main` con los ultimos cambios hechos en la rama de desarrollo**.
