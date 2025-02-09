@@ -167,4 +167,60 @@ print(valor_configuracion)  # Salida: "1.0.0"
 - **Siempre mantener actualizada la rama `main` con los ultimos cambios hechos en la rama de desarrollo**.
 
 ## 11. Consideraciones
-- **Siempre mantener actualizada la rama `main` con los ultimos cambios hechos en la rama de desarrollo**.
+- **Tener previamente instalado Visual Studio Code**.
+- **Tener previamente configurado Git**.
+
+para vincular VS code con Git, dar clic en la siguiente sección de la interface
+
+![1739131285678](Public/Img/README/1739131285678.png)
+
+dar clic en iniciar sesion
+
+![1739131337666](Public/Img/README/1739131337666.png)
+
+iniciar sesión con GitHub
+![1739131394780](Public/Img/README/1739131394780.png)
+
+Se abrirá una pestaña para iniciar sesión con GitHub, en casi de ser un dispositivo nuevo, enviará una notificación a su correo.
+![1739131596454](Public/Img/README/1739131596454.png)
+
+Seleccione su cuenta
+![1739131732018](Public/Img/README/1739131732018.png)
+
+De clic en abrir en visual studio para redireccionarnos a la aplicación
+![1739131776680](Public/Img/README/1739131776680.png)
+
+en caso de aparecer este mensaje, repetir los pasos anteriores
+![1739131854084](Public/Img/README/1739131854084.png)
+
+una vez se ha hecho corectamente, aparecera nuestra cuenta de github
+![1739131915172](Public/Img/README/1739131915172.png)
+
+## 12. Clonar repositorio
+
+dar clic en el siguiente icono para clonar repositorio
+![1739131988089](Public/Img/README/1739131988089.png)
+
+seleccionar clonar dsede GitHub (esto accedera a nuestros repositorios)
+![1739132045452](Public/Img/README/1739132045452.png)
+
+Dar clic para iniciar sesión desde VS code en Github
+![1739132086148](Public/Img/README/1739132086148.png)
+
+Repetir los pasos anteriores
+![1739132130698](Public/Img/README/1739132130698.png)
+
+Seleccionar el repositorio correspondiente
+![1739132306733](Public/Img/README/1739132306733.png)
+
+Seleccionar la ubicación, es recomendable crear una carpeta aparte llamada `WORKSPACE`, esto tardara unos segundos
+![1739132359270](Public/Img/README/1739132359270.png)
+
+abrir el repositorio
+![1739132448399](Public/Img/README/1739132448399.png)
+
+Movernos de la rama `main` a `dev`, esto puede hacerlo desde la interface o comandos de Git
+![1739132542034](Public/Img/README/1739132542034.png)
+
+una vez dentro de dev, peuden comenzar a realizar su trabajo
+![1739132627749](Public/Img/README/1739132627749.png)
