@@ -86,3 +86,43 @@ exit;
 <p>El punto de entrada del sistema es el archivo <code>main.py</code>. Se recomienda utilizar Visual Studio Code (VS Code) para trabajar en el proyecto.</p>
 
 <p>Para aprovechar las capacidades de depuración, se proporciona una configuración predefinida en el archivo <code>.vscode/launch.json</code>. Asegúrate de tener la extensión "Python" instalada en VS Code y utiliza esta configuración para facilitar el proceso de desarrollo y depuración del sistema.</p>
+
+
+# Lineamientos para la Adición de Nuevas Funcionalidades  
+
+## 1. Configuración Inicial  
+- Añadir datos de configuración en el archivo de configuración por defecto.  
+
+## 2. Obtener Datos de Configuración  
+- Añadir líneas de código en la función `get_config_data` para obtener cada dato añadido en el archivo de configuración.  
+- Asegurarse de que los datos obtenidos sean acordes al tipo de uso del sistema.  
+
+## 3. Asignación de Variables en `View_Panel_Config`  
+- Guardar los datos obtenidos en el paso anterior en variables dentro de la clase `View_Panel_Config`.  
+- Declarar las variables acorde al tipo de dato que están almacenando.  
+
+## 4. Detección y Registro de Cambios  
+- Implementar código en el método `save_data_interna` para detectar cambios y guardar información.  
+- Registrar los cambios realizados en el sistema.  
+
+## 5. Validaciones en `validate_data_interna`  
+- Añadir validaciones acorde al tipo de uso del sistema.  
+- Para números, asegurarse de qasignar el metodo `validate_entry_number`.  
+
+## 6. Limpieza de Datos  
+- Implementar código en `clean_data_form_interna` para limpiar las cajas de texto.  
+- La limpieza debe estar acorde al tipo de uso del sistema.  
+
+## 7. Reinicio de Configuración  
+- Cerrar todo, eliminar la configuración del sistema y cargar la configuración desde cero.  
+
+## 8. Pruebas  
+- En caso de añadir nuevas funcionalidades, utilizar el archivo `test.py` para asegurar el correcto funcionamiento del sistema.  
+
+## 9. Control de Versiones  
+- **No hacer cambios directamente en la rama `main`**.  
+- Utilizar únicamente la rama de desarrollo.  
+- Solo después de la validación de los cambios, fusionar con `master`.  
+
+## 10. Manejo de ramas
+- **Siempre mantener actualizada la rama `main` con los ultimos cambios hechos en la rama de desarrollo**.  

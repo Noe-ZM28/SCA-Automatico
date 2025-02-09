@@ -182,6 +182,17 @@ CREATE TABLE `Usuarios` (
   `Sucursal` varchar(25) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE `Cambios` (
+  `id` int(20) NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(255) NOT NULL,
+  `valor_anterior` varchar(255) NOT NULL,
+  `valor_nuevo` varchar(255) NOT NULL,
+  `tipo_cambio` varchar(255) NOT NULL,
+  `hora` datetime NOT NULL,
+  `nombre_usuario` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+);
+
 --
 -- Volcado de datos para la tabla `Usuarios`
 --
