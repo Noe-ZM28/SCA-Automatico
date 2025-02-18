@@ -1,7 +1,8 @@
 {
     "system_options": [
         "TPV",
-        "Entrada"
+        "Entrada",
+        "Salida"
     ],
     "system_to_load": 0,
     "general": {
