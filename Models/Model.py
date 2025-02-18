@@ -474,7 +474,7 @@ class Operacion:
         sql = "SELECT id_cliente FROM Pensionados WHERE Num_tarjeta=%s"
         cursor.execute(sql, datos)
         cone.close()
-        return cursor.fetchall()[0][0]
+        return cursor.fetchall()
 
     def AltaPensionado(self, datos):
         cone = self.abrir()

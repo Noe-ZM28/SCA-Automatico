@@ -2888,13 +2888,13 @@ class ViewCobro:
 
         resultado = self.DB.ValidarRFID(numtarjeta)
 
-        if not resultado:
+        if not resultado or len(resultado) == 0:
             mb.showwarning(
                 "IMPORTANTE", "No existe cliente para ese numero de Tarjeta")
             self.limpiar_datos_pago()
             return
 
-        respuesta = self.DB.ConsultaPensionado(resultado)
+        respuesta = self.DB.ConsultaPensionado(resultado[0][0])
 
         if not respuesta:
             mb.showwarning(
