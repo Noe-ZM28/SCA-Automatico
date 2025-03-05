@@ -2,9 +2,13 @@ from datetime import datetime, timedelta
 from escpos.printer import Usb
 import traceback
 import tkinter as tk
+from tkinter import messagebox as mb, ttk
+
 from Models.Model import Operacion
 from time import sleep
 from Controllers.ConfigController import ConfigController
+from .ViewLoginPanelConfig import View_Login
+
 from Tools.Tools import Tools
 import RPi.GPIO as io           # Importa libreria de I/O (entradas / salidas)
 
@@ -60,11 +64,6 @@ io.output(Pines.PIN_BARRERA.value, State.OFF.value)
 io.output(Pines.PIN_INDICADOR_BARRERA.value, State.OFF.value)
 
 
-nombre_estacionamiento = 'Hidalgo 401'
-nombre_salida = "Punto Santa Rosa"
-
-font_mensaje = ('Arial', 40)
-font_reloj = ('Arial', 65)
 
 fullscreen = True
 
@@ -82,8 +81,10 @@ class Salida:
         # Objeto para crear la ventana principal
         self.root=tk.Tk()
 
+        self.get_data()
+
         # Título de la ventana
-        self.root.title(f"{nombre_estacionamiento} Salida {nombre_salida}")
+        self.root.title(f"{self.nombre_estacionamiento}")
 
         if fullscreen:
             # Obtener el ancho y alto de la pantalla
@@ -107,14 +108,52 @@ class Salida:
         # Variable para guardar la placa del vehículo
         self.Placa = tk.StringVar()
 
+
         # Método para mostrar la interface
         self.Interface()
+        
 
         # Método para verificar las entradas de los sensores
         self.check_inputs() 
 
         # Iniciar el bucle principal de la ventana
         self.root.mainloop() 
+
+    def get_data(self):
+        data_config = instance_config.get_config("general")
+        self.nombre_estacionamiento = data_config["informacion_estacionamiento"]["nombre_estacionamiento"]
+
+        self.button_color = data_config["configuracion_sistema"]["color_botones_interface"]
+        self.button_letters_color = data_config["configuracion_sistema"]["color_letra_botones_interface"]
+        self.fuente_sistema = data_config["configuracion_sistema"]["fuente"]
+        size_text_font = data_config["configuracion_sistema"]["size_text_font"] + 10
+
+        self.size_text_font_tittle_system = data_config[
+            "configuracion_sistema"]["size_text_font_tittle_system"] + 10
+        self.size_text_font_subtittle_system = data_config[
+            "configuracion_sistema"]["size_text_font_subtittle_system"] + 10
+        self.size_text_button_font = data_config["configuracion_sistema"]["size_text_button_font"] + 10
+
+        self.font_subtittle_system = (
+            self.fuente_sistema, self.size_text_font_subtittle_system, 'bold')
+        self.font_tittle_system = (
+            self.fuente_sistema, self.size_text_font_tittle_system, 'bold')
+        self.font_botones_interface = (
+            self.fuente_sistema, self.size_text_button_font, 'bold')
+        self.font = self.font_subtittle_system
+
+        size = (size_text_font+30, size_text_font+10)
+        self.hide_password_icon = __instance_tools__.get_icon(
+            data_config["imagenes"]["hide_password_icon"], size)
+        self.show_password_icon = __instance_tools__.get_icon(
+            data_config["imagenes"]["show_password_icon"], size)
+        size = size_text_font+15
+        self.config_icon = __instance_tools__.get_icon(
+            data_config["imagenes"]["config_icon"], (size, size))
+        data_config = None
+        
+        self.font_mensaje = ('Arial', 40)
+        self.font_reloj = ('Arial', 65)
 
     def Interface(self):
         """
@@ -134,16 +173,20 @@ class Salida:
         frame_mensaje_bienvenida.grid_rowconfigure(0, weight=1)
         frame_mensaje_bienvenida.grid_columnconfigure(0, weight=1)
 
+        boton_config = ttk.Button(
+            frame_mensaje_bienvenida, image=self.config_icon, command=self.view_config_panel)
+        boton_config.grid(column=0, row=0, padx=5, pady=5)
+
         # Label para mostrar el mensaje de bienvenida
-        label_entrada = tk.Label(frame_mensaje_bienvenida, text=f"¡Hasta pronto!", font=font_mensaje, justify='center')
-        label_entrada.grid(row=0, column=0)
+        label_entrada = tk.Label(frame_mensaje_bienvenida, text=f"¡Hasta pronto!", font=self.font_mensaje, justify='center')
+        label_entrada.grid(row=0, column=1)
 
 
         frame_info = tk.LabelFrame(seccion_entrada)
         frame_info.grid(column=0, row=2, padx=2, pady=2)
 
         # Label para mostrar el mensaje del sistema
-        self.label_informacion = tk.Label(frame_info, text=System_Messages.DEFAULT_TEXT.value, width=27, font=font_mensaje, justify='center') 
+        self.label_informacion = tk.Label(frame_info, text=System_Messages.DEFAULT_TEXT.value, width=27, font=self.font_mensaje, justify='center') 
         self.label_informacion.grid(column=0, row=0, padx=2, pady=2)
 
 
@@ -165,7 +208,7 @@ class Salida:
         frame_reloj.grid(column=0, row=1, padx=2, pady=2)
 
         # Label para mostrar la hora actual
-        self.Reloj = tk.Label(frame_reloj, font=font_reloj, justify='center')
+        self.Reloj = tk.Label(frame_reloj, font=self.font_reloj, justify='center')
         self.Reloj.grid(column=0, row=0, padx=2, pady=2)
 
         frame_etiquetas = tk.Frame(frame_inferior)
@@ -173,6 +216,11 @@ class Salida:
 
         # Dar el foco al entry de la tarjeta
         self.entry_salida.focus()
+
+    def view_config_panel(self):
+        __instance_tools__.desactivar(self.root)
+        View_Login(False)
+        __instance_tools__.activar(self.root)
 
     def check_inputs(self):
         """

@@ -108,20 +108,6 @@ BanBoton = State.OFF.value
 BanSenBoleto = State.ON.value
 BanImpresion = State.ON.value #No ha impreso
 
-logo_1 = "LOGO1.jpg"
-AutoA = "AutoA.png"
-qr_imagen = "reducida.png"
- 
-nombre_estacionamiento = 'Hidalgo 401'
-nombre_entrada = "Punto Santa Rosa"
-
-font_entrada = ('Arial', 20)
-font_entrada_negritas = ('Arial', 20, 'bold')
-font_mensaje = ('Arial', 40)
-font_reloj = ('Arial', 65)
-
-font_etiquetas = ('Arial', 30, 'bold')
-
 fullscreen = False
 
 
@@ -140,8 +126,10 @@ class Entrada:
         # Objeto para crear la ventana principal
         self.root=tk.Tk()
 
+        self.get_data()
+
         # Título de la ventana
-        self.root.title(f"{nombre_estacionamiento} Entrada {nombre_entrada}")
+        self.root.title(f"{self.nombre_estacionamiento} Entrada {self.nombre_entrada}")
 
         if fullscreen:
             # Obtener el ancho y alto de la pantalla
@@ -165,7 +153,6 @@ class Entrada:
         # Variable para guardar la placa del vehículo
         self.Placa = tk.StringVar()
         
-        self.get_data()
 
         # Método para mostrar la interface
         self.Interface()
@@ -178,6 +165,9 @@ class Entrada:
         
     def get_data(self):
         data_config = instance_config.get_config("general")
+        
+        self.nombre_estacionamiento = data_config["informacion_estacionamiento"]["nombre_estacionamiento"]
+        self.nombre_entrada = data_config["informacion_estacionamiento"]["nombre_entrada"]
         self.button_color = data_config["configuracion_sistema"]["color_botones_interface"]
         self.button_letters_color = data_config["configuracion_sistema"]["color_letra_botones_interface"]
         self.fuente_sistema = data_config["configuracion_sistema"]["fuente"]
@@ -206,6 +196,12 @@ class Entrada:
         self.config_icon = self.instance_tools.get_icon(
             data_config["imagenes"]["config_icon"], (size, size))
         data_config = None
+
+        self.font_mensaje = ('Arial', 40)
+        self.font_reloj = ('Arial', 65)
+
+        self.font_etiquetas = ('Arial', 30, 'bold')
+
 
     def Interface(self):
         """
@@ -236,7 +232,7 @@ class Entrada:
         boton_config.grid(column=0, row=0, padx=5, pady=5)
 
         # Label para mostrar el mensaje de bienvenida
-        label_entrada = tk.Label(frame_mensaje_bienvenida, text=f"Bienvenido(a)", font=font_mensaje, justify='center')
+        label_entrada = tk.Label(frame_mensaje_bienvenida, text=f"Bienvenido(a)", font=self.font_mensaje, justify='center')
         label_entrada.grid(row=0, column=1)
 
 
@@ -244,7 +240,7 @@ class Entrada:
         frame_info.grid(column=0, row=2, padx=2, pady=2)
 
         # Label para mostrar el mensaje del sistema
-        self.label_informacion = tk.Label(frame_info, text=System_Messages.NONE_MESAGE.value, width=25, font=font_mensaje, justify='center') 
+        self.label_informacion = tk.Label(frame_info, text=System_Messages.NONE_MESAGE.value, width=25, font=self.font_mensaje, justify='center') 
         self.label_informacion.grid(column=0, row=0, padx=2, pady=2)
 
 
@@ -266,18 +262,18 @@ class Entrada:
         frame_reloj.grid(column=0, row=1, padx=2, pady=2)
 
         # Label para mostrar la hora actual
-        self.Reloj = tk.Label(frame_reloj, font=font_reloj, justify='center')
+        self.Reloj = tk.Label(frame_reloj, font=self.font_reloj, justify='center')
         self.Reloj.grid(column=0, row=0, padx=2, pady=2)
 
         frame_etiquetas = tk.Frame(frame_inferior)
         frame_etiquetas.grid(column=0, row=2, padx=2, pady=2)
         
         # Label para mostrar el estado del sensor de auto
-        self.label_auto = tk.Label(frame_etiquetas, text=Alerts.AUTO_EXISTS.value, width=15, font=font_etiquetas, justify='center', background=Colors.GREEN.value)
+        self.label_auto = tk.Label(frame_etiquetas, text=Alerts.AUTO_EXISTS.value, width=15, font=self.font_etiquetas, justify='center', background=Colors.GREEN.value)
         self.label_auto.grid(column=0, row=0, padx=2, pady=2)
         
         # Label para mostrar el estado del botón
-        self.label_boton = tk.Label(frame_etiquetas, text=Alerts.BUTTON_PRESSED.value, width=15, font=font_etiquetas, justify='center', background=Colors.GREEN.value) 
+        self.label_boton = tk.Label(frame_etiquetas, text=Alerts.BUTTON_PRESSED.value, width=15, font=self.font_etiquetas, justify='center', background=Colors.GREEN.value) 
         self.label_boton.grid(column=1, row=0, padx=2, pady=2)
 
         # Dar el foco al entry de la tarjeta
