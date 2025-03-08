@@ -241,6 +241,7 @@ class Salida:
             folio = datos[16:]
             
             print(f"Qr leido: {datos}")
+            print(f"len QR {len(datos)}")
             print(f"Folio: {datos[16:]}")
 
             if not datos:
