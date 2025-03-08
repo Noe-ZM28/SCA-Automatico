@@ -238,7 +238,10 @@ class Salida:
     def salida_cliente(self, event):
         try:
             datos = self.variable_salida.get()
-            print(datos)
+            folio = datos[16:]
+            
+            print(f"Qr leido: {datos}")
+            print(f"Folio: {datos}")
 
             if not datos:
                 self.show_message(System_Messages.DEFAULT_TEXT)
@@ -250,7 +253,6 @@ class Salida:
                 return
 
             elif len(datos) > 19:
-                folio = datos[16:]
                 print(folio)
 
                 respuesta=self.DB.consulta(folio)
@@ -271,7 +273,6 @@ class Salida:
                     self.show_message(System_Messages.RE_USED_TICKET)
                     self.variable_salida.set("")
                     return
-
 
                 estatus=("Afuera", folio)
                 self.DB.ActualizaSalida(estatus)
