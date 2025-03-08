@@ -395,6 +395,14 @@ class PrinterController:
             Entrada = data[4]
             Salida = data[5]
             TiempoTotal = data[6]
+            datos = "1234567890123456" #Datos para rellenar salida de qr
+           
+            DataSalidaQr = datos + Folio 
+            print(DataSalidaQr)
+
+            #Generar qr de salida
+            path = self.__instance_tools__.generar_QR(DataSalidaQr,"./Public/Img/qrsalida.png")
+
 
             printer.set(align="center")
 
@@ -420,6 +428,8 @@ class PrinterController:
             printer.text(f'El auto permanecio: {TiempoTotal}\n')
             printer.text(f'El folio del boleto es: {Folio}\n')
             printer.text(f'TIPO DE COBRO: {TarifaPreferente}\n')
+            printer.set(align="center")
+            printer.image(path)
             printer.cut()
 
             printer.set(align="center")
@@ -666,4 +676,5 @@ class PrinterController:
             str: Mensaje de error concatenado.
         """
         return type_mesage_error.value + " " + mesage_error.value
+    
    
