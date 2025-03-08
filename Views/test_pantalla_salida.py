@@ -241,7 +241,7 @@ class Salida:
             folio = datos[16:]
             
             print(f"Qr leido: {datos}")
-            print(f"Folio: {datos}")
+            print(f"Folio: {datos[16:]}")
 
             if not datos:
                 self.show_message(System_Messages.DEFAULT_TEXT)
