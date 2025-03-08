@@ -173,13 +173,20 @@ class Salida:
         frame_mensaje_bienvenida.grid_rowconfigure(0, weight=1)
         frame_mensaje_bienvenida.grid_columnconfigure(0, weight=1)
 
+        #Boton barrera
+        boton_barrera = tk.Button(
+            frame_mensaje_bienvenida,
+            text="Abrir barrera", command=self.abrir_barrera, height=1, anchor="center", background=self.button_color, fg=self.button_letters_color, font=self.font_botones_interface, width=11)
+        boton_barrera.grid(
+            column=0, row=0, padx=5, pady=5)
+        
         boton_config = ttk.Button(
             frame_mensaje_bienvenida, image=self.config_icon, command=self.view_config_panel)
-        boton_config.grid(column=0, row=0, padx=5, pady=5)
+        boton_config.grid(column=1, row=0, padx=5, pady=5)
 
         # Label para mostrar el mensaje de bienvenida
         label_entrada = tk.Label(frame_mensaje_bienvenida, text=f"¡Hasta pronto!", font=self.font_mensaje, justify='center')
-        label_entrada.grid(row=0, column=1)
+        label_entrada.grid(row=0, column=2)
 
 
         frame_info = tk.LabelFrame(seccion_entrada)
