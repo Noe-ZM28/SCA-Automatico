@@ -5,8 +5,9 @@ Public/Img/AutoA.png
 Public/Img/LOGO.jpg
 Public/Img/QR_pension.png
 Public/Img/reducida.png
-
+Public/Img/qrsalida.png
 QR_pensiones/*.png
+
 
 ### Django ###
 *.log
