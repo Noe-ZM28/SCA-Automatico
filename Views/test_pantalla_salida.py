@@ -275,8 +275,8 @@ class Salida:
                     self.variable_salida.set("")
                     return
 
-                # estatus=("Afuera", folio)
-                # self.DB.ActualizaSalida(estatus)
+                estatus=("Afuera", folio)
+                self.DB.ActualizaSalida(estatus)
 
                 # Ejecutar el método abrir_barrera
                 self.variable_salida.set("")
