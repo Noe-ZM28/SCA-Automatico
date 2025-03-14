@@ -165,7 +165,7 @@ class PrinterController:
                 f'Entro: {horaentrada.strftime(self.date_format_ticket)}\n')
             printer.text(f'Placas: {placa}\n')
             printer.image(path)
-            printer.image(self.imagen_marcas_auto)
+            #printer.image(self.imagen_marcas_auto)
             printer.text("-" * 30 + "\n")
             printer.cut()
 
