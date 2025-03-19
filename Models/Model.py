@@ -719,3 +719,12 @@ class Operacion:
         cursor.execute(query)
         cone.close()
         return cursor.fetchall()
+
+    def ActualizaSalida(self,estatus):
+        cone=self.abrir()
+        cursor=cone.cursor()
+        sql="update Entradas set Placas = %s where id=%s;"
+        #colocamos en entradas "Afuera" en campo Placas, para no permitir re-uso de boletos de salida
+        cursor.execute(sql,estatus)
+        cone.commit()
+        cone.close()

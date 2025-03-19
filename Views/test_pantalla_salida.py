@@ -173,13 +173,20 @@ class Salida:
         frame_mensaje_bienvenida.grid_rowconfigure(0, weight=1)
         frame_mensaje_bienvenida.grid_columnconfigure(0, weight=1)
 
+        #Boton barrera
+        boton_barrera = tk.Button(
+            frame_mensaje_bienvenida,
+            text="Abrir barrera", command=self.abrir_barrera, height=1, anchor="center", background=self.button_color, fg=self.button_letters_color, font=self.font_botones_interface, width=11)
+        boton_barrera.grid(
+            column=0, row=0, padx=5, pady=5)
+        
         boton_config = ttk.Button(
             frame_mensaje_bienvenida, image=self.config_icon, command=self.view_config_panel)
-        boton_config.grid(column=0, row=0, padx=5, pady=5)
+        boton_config.grid(column=1, row=0, padx=5, pady=5)
 
         # Label para mostrar el mensaje de bienvenida
         label_entrada = tk.Label(frame_mensaje_bienvenida, text=f"¡Hasta pronto!", font=self.font_mensaje, justify='center')
-        label_entrada.grid(row=0, column=1)
+        label_entrada.grid(row=0, column=2)
 
 
         frame_info = tk.LabelFrame(seccion_entrada)
@@ -238,7 +245,11 @@ class Salida:
     def salida_cliente(self, event):
         try:
             datos = self.variable_salida.get()
-            print(datos)
+            folio = datos[16:]
+            
+            print(f"Qr leido: {datos}")
+            print(f"len QR {len(datos)}")
+            print(f"Folio: {datos[16:]}")
 
             if not datos:
                 self.show_message(System_Messages.DEFAULT_TEXT)
@@ -249,8 +260,7 @@ class Salida:
                 self.salida_pensionados(self)
                 return
 
-            elif len(datos) > 19:
-                folio = datos[16:]
+            elif len(datos) >= 18:
                 print(folio)
 
                 respuesta=self.DB.consulta(folio)
@@ -271,7 +281,6 @@ class Salida:
                     self.show_message(System_Messages.RE_USED_TICKET)
                     self.variable_salida.set("")
                     return
-
 
                 estatus=("Afuera", folio)
                 self.DB.ActualizaSalida(estatus)
