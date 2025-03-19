@@ -500,7 +500,7 @@ class Entrada:
                 return
 
             # Consultar los datos del pensionado en la base de datos
-            respuesta = self.DB.ConsultaPensionado(Existe)
+            respuesta = self.DB.ConsultaPensionado_entrar(Existe)
 
             # Recorrer la respuesta de la consulta
             for fila in respuesta:
