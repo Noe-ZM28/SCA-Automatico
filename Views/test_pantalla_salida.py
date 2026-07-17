@@ -260,7 +260,7 @@ class Salida:
                 self.salida_pensionados(self)
                 return
 
-            elif len(datos) >= 18:
+            elif len(datos) >= 17:
                 print(folio)
 
                 respuesta=self.DB.consulta(folio)
